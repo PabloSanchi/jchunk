@@ -3,14 +3,14 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>semantic</groupId>
-	<artifactId>chunker</artifactId>
+	<groupId>com.github.PabloSanchi</groupId>
+	<artifactId>jchunk</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
 	<packaging>pom</packaging>
 	<url>https://github.com/PabloSanchi/text-chunker-module.git</url>
 
-	<name>Chunker</name>
+	<name>JChunk</name>
 	<description>Enable text chunkers for RAGs in Java</description>
 
 	<scm>
