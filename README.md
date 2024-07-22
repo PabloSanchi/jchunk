@@ -29,5 +29,5 @@ How it works?
 9. Done!
 
 
-Inspired by: Greg Kamradt's [chunkin ideas jupyter notebook](https://github.com/FullStackRetrieval-com/RetrievalTutorials/blob/main/tutorials/LevelsOfTextSplitting/5_Levels_Of_Text_Splitting.ipynb)
+Inspired by: Greg Kamradt's [text splitting ideas jupyter notebook](https://github.com/FullStackRetrieval-com/RetrievalTutorials/blob/main/tutorials/LevelsOfTextSplitting/5_Levels_Of_Text_Splitting.ipynb)
 
