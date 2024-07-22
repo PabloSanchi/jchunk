@@ -13,6 +13,10 @@
 	<name>JChunk</name>
 	<description>Enable text chunkers for RAGs in Java</description>
 
+	<modules>
+		<module>jchunk-semantic</module>
+	</modules>
+
 	<scm>
 		<url>https://github.com/PabloSanchi/text-chunker-module</url>
 		<connection>git://github.com/PabloSanchi/text-chunker-module.git</connection>
