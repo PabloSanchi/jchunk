@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.github.PabloSanchi</groupId>
+        <artifactId>jchunk</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>jchunk-core</artifactId>
+    <packaging>jar</packaging>
+    <name>JChunk - Core</name>
+    <description>Base definitions for jchunk module</description>
+    <url>https://github.com/PabloSanchi/jchunk</url>
+
+    <scm>
+        <url>https://github.com/PabloSanchi/jchunk</url>
+        <connection>git://github.com/PabloSanchi/jchunk.git</connection>
+        <developerConnection>git@github.com:PabloSanchi/jchunk.git</developerConnection>
+    </scm>
+
+</project>

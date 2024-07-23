@@ -15,16 +15,18 @@
 
 	<modules>
 		<module>jchunk-semantic</module>
+		<module>jchunk-core</module>
 	</modules>
 
 	<scm>
-		<url>https://github.com/PabloSanchi/text-chunker-module</url>
-		<connection>git://github.com/PabloSanchi/text-chunker-module.git</connection>
-		<developerConnection>git@github.com:PabloSanchi/text-chunker-module.git</developerConnection>
+		<url>https://github.com/PabloSanchi/jchunk</url>
+		<connection>git://github.com/PabloSanchi/jchunk.git</connection>
+		<developerConnection>git@github.com:PabloSanchi/jchunk.git</developerConnection>
 	</scm>
+
 	<issueManagement>
 		<system>Github Issues</system>
-		<url>https://github.com/PabloSanchi/text-chunker-module/issues</url>
+		<url>https://github.com/PabloSanchi/jchunk/issues</url>
 	</issueManagement>
 
 	<licenses>
@@ -44,6 +46,7 @@
 
 		<!-- production dependencies -->
 		<spring-boot.version>3.3.2</spring-boot.version>
+		<spring-ai.version>1.0.1</spring-ai.version>
 
 		<!-- plugin versions -->
 		<spring-javaformat-maven-plugin.version>0.0.39</spring-javaformat-maven-plugin.version>
@@ -60,8 +63,40 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
+
+			<dependency>
+				<groupId>io.springboot.ai</groupId>
+				<artifactId>spring-ai-core</artifactId>
+				<version>${spring-ai.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>io.springboot.ai</groupId>
+				<artifactId>spring-ai-transformers</artifactId>
+				<version>${spring-ai.version}</version>
+			</dependency>
+
 		</dependencies>
 	</dependencyManagement>
+
+	<repositories>
+		<repository>
+			<id>spring-milestones</id>
+			<name>Spring Milestones</name>
+			<url>https://repo.spring.io/milestone</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>spring-snapshots</id>
+			<name>Spring Snapshots</name>
+			<url>https://repo.spring.io/snapshot</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+		</repository>
+	</repositories>
 
 	<build>
 		<plugins>
