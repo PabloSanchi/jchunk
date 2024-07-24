@@ -10,9 +10,11 @@ import java.util.stream.Collectors;
 
 /**
  * A semantic chunker that chunks the content based on the semantic meaning
+ *
  * @author Pablo Sanchidrian Herrera
  */
 public class SemanticChunker implements IChunker {
+
 	private final EmbeddingModel embeddingModel;
 
 	private SentenceSplitingStategy sentenceSplitingStategy = SentenceSplitingStategy.DEFAULT;
@@ -44,9 +46,13 @@ public class SemanticChunker implements IChunker {
 	 * Class to represent a sentence during the splitting process
 	 */
 	public static class Sentence {
+
 		private Integer index;
+
 		private String content;
+
 		private String combined;
+
 		private List<Double> embedding;
 
 		public Integer getIndex() {
@@ -86,6 +92,7 @@ public class SemanticChunker implements IChunker {
 		}
 
 		public static class Builder {
+
 			private final Sentence sentence = new Sentence();
 
 			public Builder index(Integer index) {
@@ -111,13 +118,15 @@ public class SemanticChunker implements IChunker {
 			public Sentence build() {
 				return this.sentence;
 			}
+
 		}
+
 	}
 
 	public List<Sentence> splitSentences(String content) {
 		return Arrays.stream(content.split(sentenceSplitingStategy.toString()))
-				.map(sentence -> Sentence.builder().content(sentence).build())
-				.collect(Collectors.toList());
+			.map(sentence -> Sentence.builder().content(sentence).build())
+			.collect(Collectors.toList());
 	}
 
 }
