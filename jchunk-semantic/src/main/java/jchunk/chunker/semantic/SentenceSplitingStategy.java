@@ -9,7 +9,7 @@ public enum SentenceSplitingStategy {
 
 	DEFAULT("(?<=[.?!])\\s+"), LINE_BREAK("\n"), PARAGRAPH("\n\n");
 
-	private String strategy;
+	private final String strategy;
 
 	SentenceSplitingStategy(String strategy) {
 		this.strategy = strategy;
