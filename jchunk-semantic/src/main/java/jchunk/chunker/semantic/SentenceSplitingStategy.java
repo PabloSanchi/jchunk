@@ -7,7 +7,7 @@ package jchunk.chunker.semantic;
 public enum SentenceSplitingStategy {
     DEFAULT("(?<=[.?!])\\s+"),
     LINE_BREAK("\n"),
-    PARAGRAPH_BREAK("\n\n");
+    PARAGRAPH("\n\n");
 
     private String strategy;
 
