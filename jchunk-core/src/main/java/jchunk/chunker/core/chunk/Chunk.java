@@ -9,6 +9,8 @@ import java.util.List;
  * @param id        the unique identifier for the chunk
  * @param content   the actual content of the chunk
  * @param embedding a list of double values representing the embedding of the chunk
+ *
+ * @author Pablo Sanchidrian Herrera
  */
 public record Chunk(String id, String content, List<Double> embedding) {
 }

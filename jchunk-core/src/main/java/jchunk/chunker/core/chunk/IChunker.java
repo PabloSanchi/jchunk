@@ -6,6 +6,8 @@ import java.util.List;
  * The IChunker interface defines the contract that all chunker implementations must follow.
  * Implementations of this interface are responsible for splitting a given content string
  * into a list of Chunk objects.
+ *
+ * @author Pablo Sanhidrian Herrera
  */
 public interface IChunker {
 
