@@ -43,7 +43,7 @@ public class SemanticChunker implements IChunker {
 	/**
 	 * Class to represent a sentence during the splitting process
 	 */
-	public class Sentence {
+	public static class Sentence {
 		private Integer index;
 		private String content;
 		private String combined;
@@ -81,12 +81,12 @@ public class SemanticChunker implements IChunker {
 			this.embedding = embedding;
 		}
 
-		public Builder builder() {
+		public static Builder builder() {
 			return new Builder();
 		}
 
 		public static class Builder {
-			private Sentence sentence;
+			private final Sentence sentence = new Sentence();
 
 			public Builder index(Integer index) {
 				this.sentence.setIndex(index);
@@ -114,9 +114,9 @@ public class SemanticChunker implements IChunker {
 		}
 	}
 
-	private List<Sentence> splitSentences(String content) {
+	public List<Sentence> splitSentences(String content) {
 		return Arrays.stream(content.split(sentenceSplitingStategy.toString()))
-				.map(sentence -> new Sentence.Builder().content(sentence).build())
+				.map(sentence -> Sentence.builder().content(sentence).build())
 				.collect(Collectors.toList());
 	}
 
