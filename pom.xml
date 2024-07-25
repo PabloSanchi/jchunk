@@ -124,7 +124,7 @@
 			<url>https://repo.spring.io/milestone</url>
 			<name>Spring Milestones</name>
 			<releases>
-				<enabled>false</enabled>
+				<enabled>true</enabled>
 			</releases>
 			<snapshots>
 				<enabled>false</enabled>
@@ -138,7 +138,7 @@
 			<url>https://repo.spring.io/milestone</url>
 			<name>Spring Milestones</name>
 			<releases>
-				<enabled>false</enabled>
+				<enabled>true</enabled>
 			</releases>
 			<snapshots>
 				<enabled>false</enabled>
