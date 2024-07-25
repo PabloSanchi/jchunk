@@ -133,11 +133,8 @@ public class SemanticChunker implements IChunker {
 	public List<Sentence> splitSentences(String content) {
 		AtomicInteger index = new AtomicInteger(0);
 		return Arrays.stream(content.split(sentenceSplitingStategy.toString()))
-				.map(sentence -> Sentence.builder()
-						.content(sentence)
-						.index(index.getAndIncrement())
-						.build())
-				.collect(Collectors.toList());
+			.map(sentence -> Sentence.builder().content(sentence).index(index.getAndIncrement()).build())
+			.collect(Collectors.toList());
 	}
 
 	/**

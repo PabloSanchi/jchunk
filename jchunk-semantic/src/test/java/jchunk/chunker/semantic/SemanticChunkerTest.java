@@ -237,5 +237,4 @@ public class SemanticChunkerTest {
 		assertThat(result).isNaN();
 	}
 
-
 }
