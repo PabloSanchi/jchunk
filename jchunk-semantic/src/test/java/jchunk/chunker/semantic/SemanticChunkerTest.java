@@ -113,10 +113,6 @@ public class SemanticChunkerTest {
 
 		List<SemanticChunker.Sentence> result = this.semanticChunker.combineSentences(input, bufferSize);
 
-		result.forEach(sentence -> {
-			System.out.println(sentence.getContent() + " -> " + sentence.getCombined());
-		});
-
 		assertThat(result).isNotNull();
 		assertThat(result.size()).isEqualTo(expectedResult.size());
 
