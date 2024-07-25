@@ -177,4 +177,65 @@ public class SemanticChunkerTest {
 			.hasMessage("The list of sentences cannot be empty");
 	}
 
+	@Test
+	public void testIdenticalVectors() {
+		configure();
+
+		List<Double> embedding1 = List.of(1.0, 2.0, 3.0);
+		List<Double> embedding2 = List.of(1.0, 2.0, 3.0);
+
+		double result = this.semanticChunker.cosineSimilarity(embedding1, embedding2);
+
+		assertThat(result).isEqualTo(1.0);
+	}
+
+	@Test
+	public void testOrthogonalVectors() {
+		configure();
+
+		List<Double> embedding1 = List.of(1.0, 0.0, 0.0);
+		List<Double> embedding2 = List.of(0.0, 1.0, 0.0);
+
+		double result = this.semanticChunker.cosineSimilarity(embedding1, embedding2);
+
+		assertThat(result).isEqualTo(0.0);
+	}
+
+	@Test
+	public void testOppositeVectors() {
+		configure();
+
+		List<Double> embedding1 = List.of(1.0, 2.0, 3.0);
+		List<Double> embedding2 = List.of(-1.0, -2.0, -3.0);
+
+		double result = this.semanticChunker.cosineSimilarity(embedding1, embedding2);
+
+		assertThat(result).isEqualTo(-1.0);
+	}
+
+	@Test
+	public void testDifferentMagnitudeVectors() {
+		configure();
+
+		List<Double> embedding1 = List.of(1.0, 2.0, 3.0);
+		List<Double> embedding2 = List.of(2.0, 4.0, 6.0);
+
+		double result = this.semanticChunker.cosineSimilarity(embedding1, embedding2);
+
+		assertThat(result).isEqualTo(1.0);
+	}
+
+	@Test
+	public void testZeroVectors() {
+		configure();
+
+		List<Double> embedding1 = List.of(0.0, 0.0, 0.0);
+		List<Double> embedding2 = List.of(0.0, 0.0, 0.0);
+
+		double result = this.semanticChunker.cosineSimilarity(embedding1, embedding2);
+
+		assertThat(result).isNaN();
+	}
+
+
 }

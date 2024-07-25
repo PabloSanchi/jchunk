@@ -6,6 +6,7 @@ import org.springframework.ai.embedding.EmbeddingModel;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -130,9 +131,13 @@ public class SemanticChunker implements IChunker {
 	 * @return the list of sentences
 	 */
 	public List<Sentence> splitSentences(String content) {
+		AtomicInteger index = new AtomicInteger(0);
 		return Arrays.stream(content.split(sentenceSplitingStategy.toString()))
-			.map(sentence -> Sentence.builder().content(sentence).build())
-			.collect(Collectors.toList());
+				.map(sentence -> Sentence.builder()
+						.content(sentence)
+						.index(index.getAndIncrement())
+						.build())
+				.collect(Collectors.toList());
 	}
 
 	/**
@@ -207,7 +212,7 @@ public class SemanticChunker implements IChunker {
 	 * @param sentence2 the second sentence embedding
 	 * @return the cosine similarity between the sentences
 	 */
-	public Double calculateSimilarity(List<Double> sentence1, List<Double> sentence2) {
+	public Double cosineSimilarity(List<Double> sentence1, List<Double> sentence2) {
 		assert sentence1 != null : "The first sentence embedding cannot be null";
 		assert sentence2 != null : "The second sentence embedding cannot be null";
 		assert sentence1.size() == sentence2.size() : "The sentence embeddings must have the same size";
