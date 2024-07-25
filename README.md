@@ -1,10 +1,29 @@
 # JChunk
 
-JChunk project is simple library that enables different types of text chunking
+JChunk project is simple library that enables different types of text splitting strategies.
+This project begun thanks to Greg Kamradt's post [text splitting ideas](https://github.com/FullStackRetrieval-com/RetrievalTutorials/blob/main/tutorials/LevelsOfTextSplitting/5_Levels_Of_Text_Splitting.ipynb)
 
 ## ⚠️ WARNING - STILL IN DEVELOPMENT ⚠️
 
-### Semantic Chunker
+For now there is only [Pablo Sanchidrian](https://github.com/PabloSanchi) developing this project (in free time) so it might take a while to get to a first stable version.
+
+Feel free to contribute!!
+
+## ROAD MAP
+- [ ] Character Chunker (NOT STARTED)
+- [ ] Recursive Character Text Chunker (NOT STARTED)
+- [ ] Document Specific Chunker (NOT STARTED)
+- [x] Semantic Chunker (IN DEVELOPMENT)
+- [ ] Agentic Chunker (NOT STARTED)
+
+
+## Character Chunker
+
+## Recursive Character Text Chunker
+
+## Document Specific Chunker
+
+## Semantic Chunker
 When doing retrieval-augmented generation (RAG) sometimes fixed chunk size is not enough 
 as we could be missing or adding info that we really need.
 
@@ -27,5 +46,6 @@ How it works?
 9. Done!
 
 
-Inspired by: Greg Kamradt's [text splitting ideas jupyter notebook](https://github.com/FullStackRetrieval-com/RetrievalTutorials/blob/main/tutorials/LevelsOfTextSplitting/5_Levels_Of_Text_Splitting.ipynb)
+## Agentic Chunker
+
 
