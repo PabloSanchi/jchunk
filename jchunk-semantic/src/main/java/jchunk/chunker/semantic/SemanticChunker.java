@@ -7,6 +7,7 @@ import org.springframework.ai.embedding.EmbeddingModel;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * A semantic chunker that chunks the content based on the semantic meaning
@@ -180,6 +181,51 @@ public class SemanticChunker implements IChunker {
 		}
 
 		return sentences;
+	}
+
+	/**
+	 * Embed the sentences using the embedding model
+	 * @param sentences the list of sentences
+	 * @return the list of sentences with the embeddings
+	 */
+	public List<Sentence> embedSentences(List<Sentence> sentences) {
+
+		List<String> sentencesText = sentences.stream().map(Sentence::getContent).toList();
+
+		List<List<Double>> embeddings = embeddingModel.embed(sentencesText);
+
+		return IntStream.range(0, sentences.size()).mapToObj(i -> {
+			Sentence sentence = sentences.get(i);
+			sentence.setEmbedding(embeddings.get(i));
+			return sentence;
+		}).collect(Collectors.toList());
+	}
+
+	/**
+	 * Calculate the similarity between the sentences embeddings
+	 * @param sentence1 the first sentence embedding
+	 * @param sentence2 the second sentence embedding
+	 * @return the cosine similarity between the sentences
+	 */
+	public Double calculateSimilarity(List<Double> sentence1, List<Double> sentence2) {
+		assert sentence1 != null : "The first sentence embedding cannot be null";
+		assert sentence2 != null : "The second sentence embedding cannot be null";
+		assert sentence1.size() == sentence2.size() : "The sentence embeddings must have the same size";
+
+		double dotProduct = 0.0;
+		double norm1 = 0.0;
+		double norm2 = 0.0;
+
+		for (int i = 0; i < sentence1.size(); i++) {
+			dotProduct += sentence1.get(i) * sentence2.get(i);
+			norm1 += Math.pow(sentence1.get(i), 2);
+			norm2 += Math.pow(sentence2.get(i), 2);
+		}
+
+		norm1 = Math.sqrt(norm1);
+		norm2 = Math.sqrt(norm2);
+
+		return dotProduct / (norm1 * norm2);
 	}
 
 }
