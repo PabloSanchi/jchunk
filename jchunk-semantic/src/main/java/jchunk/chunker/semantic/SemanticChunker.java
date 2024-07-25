@@ -123,10 +123,63 @@ public class SemanticChunker implements IChunker {
 
 	}
 
+	/**
+	 * Split the content into sentences
+	 * @param content the content to split
+	 * @return the list of sentences
+	 */
 	public List<Sentence> splitSentences(String content) {
 		return Arrays.stream(content.split(sentenceSplitingStategy.toString()))
 			.map(sentence -> Sentence.builder().content(sentence).build())
 			.collect(Collectors.toList());
+	}
+
+	/**
+	 * Combine the sentences based on the buffer size (append the buffer size of sentences
+	 * behind and over the current sentence)
+	 * <p>
+	 * Use the sliding window technique to reduce the time complexity
+	 * @param sentences the list of sentences
+	 * @param bufferSize the buffer size to use
+	 * @return the list of combined sentences
+	 */
+	public List<Sentence> combineSentences(List<Sentence> sentences, Integer bufferSize) {
+		assert sentences != null : "The list of sentences cannot be null";
+		assert !sentences.isEmpty() : "The list of sentences cannot be empty";
+		assert bufferSize != null && bufferSize > 0 : "The buffer size cannot be null nor 0";
+		assert bufferSize < sentences.size() : "The buffer size cannot be greater equal than the input length";
+
+		int n = sentences.size();
+		int windowSize = bufferSize * 2 + 1;
+		int currentWindowSize = 0;
+		StringBuilder windowBuilder = new StringBuilder();
+
+		for (int i = 0; i <= Math.min(bufferSize, n - 1); i++) {
+			windowBuilder.append(sentences.get(i).getContent()).append(" ");
+			currentWindowSize++;
+		}
+
+		windowBuilder.deleteCharAt(windowBuilder.length() - 1);
+
+		for (int i = 0; i < n; ++i) {
+			sentences.get(i).setCombined(windowBuilder.toString());
+
+			if (currentWindowSize < windowSize && i + bufferSize + 1 < n) {
+				windowBuilder.append(" ").append(sentences.get(i + bufferSize + 1).getContent());
+				currentWindowSize++;
+			}
+			else {
+				windowBuilder.delete(0, sentences.get(i - bufferSize).getContent().length() + 1);
+				if (i + bufferSize + 1 < n) {
+					windowBuilder.append(" ").append(sentences.get(i + bufferSize + 1).getContent());
+				}
+				else {
+					currentWindowSize--;
+				}
+			}
+		}
+
+		return sentences;
 	}
 
 }
