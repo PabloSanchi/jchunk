@@ -46,7 +46,7 @@
 
 		<!-- production dependencies -->
 		<spring-boot.version>3.3.2</spring-boot.version>
-		<spring-ai.version>1.0.0-SNAPSHOT</spring-ai.version>
+		<spring-ai.version>1.0.0-M1</spring-ai.version>
 
 		<!-- plugin versions -->
 		<spring-javaformat-maven-plugin.version>0.0.39</spring-javaformat-maven-plugin.version>
