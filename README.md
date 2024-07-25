@@ -2,9 +2,7 @@
 
 JChunk project is simple library that enables different types of text chunking
 
-## ⚠️ WARNING - EARLY STAGE
-
-## Developing
+## ⚠️ WARNING - STILL IN DEVELOPMENT ⚠️
 
 ### Semantic Chunker
 When doing retrieval-augmented generation (RAG) sometimes fixed chunk size is not enough 
