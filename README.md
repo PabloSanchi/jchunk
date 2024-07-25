@@ -24,25 +24,94 @@ Feel free to contribute!!
 ## Document Specific Chunker
 
 ## Semantic Chunker
-When doing retrieval-augmented generation (RAG) sometimes fixed chunk size is not enough 
-as we could be missing or adding info that we really need.
+When performing retrieval-augmented generation (RAG), fixed chunk sizes can sometimes be inadequate,
+either missing crucial information or adding extraneous content. To address this, we can use embeddings to represent the semantic meaning of text, allowing us to chunk content based on semantic relationships.
 
-Idea: use embeddings. with the embedding we represent the semantic meaning of a string so then when comparing embedding of different texts we can see the correlation between them. amd then establish a 
-chunking criteria based on that.
+### How it works?
 
-How it works?
+1. Sentence Splitting:
 
-1. We split the entire text into sentences (using '.', '?' and '!') (**NOTE: CAN BE OTHER STRATEGY**).
-2. Transform the list of sentences into a list of maps Array<Map<String, Object>> `[{ "sentence": <sentence>, "index": <index> }]`.
-3. Combine the sentence before and after so that we reduce noise and capture more of the relationships between sequential sentences, add a key `combinedSentence`.
-4. Add a key with the embedding of the `combinedSentence` like `combinedSentenceEmbedding`.
-5. Now let's add the cosine distances between sequential embedding pairs to see where the break points are. We'll add `distanceToNext` as another key.
-6. Now we see sections where distances are smaller and then areas of larger distances. Meaning that we can actually infer that the higher the numer the less related are those text portions.
-7. Let's split those chunks using the 95th percentile of the distances as the threshold.
+Split the entire text into sentences using delimiters like '.', '?', and '!' (alternative strategies can also be used).
+
+2. Mapping Sentences:
+
+Transform the list of sentences into the following structure: 
+```json
+[
+  { 
+    "sentence": "this is the sentence.",
+    "index": 0
+  },
+  {
+    "sentence": "this is the next sentence.",
+    "index": 1
+  },
+  {
+    "sentence": "this is the last sentence.",
+    "index": 2
+  }
+]
+```
+
+3. Combining Sentences:
+
+Combine each sentence with its preceding and succeeding sentences (the number of sentences will be given by a bufferSize variable ) to reduce noise and better capture relationships. Add a key `combined` for this combined text.
+
+Example for buffer size 1: 
+```json
+[
+  { 
+    "sentence": "this is the sentence.",
+    "combined": "this is the sentence. this is the next sentence.",
+    "index": 0
+  },
+  {
+    "sentence": "this is the next sentence.",
+    "combined": "this is the sentence. this is the next sentence. this is the last sentence.",
+    "index": 1
+  },
+  {
+    "sentence": "this is the last sentence.",
+    "combined": "this is the next sentence. this is the last sentence.",
+    "index": 2
+  }
+]
+```
+
+4. Generating Embeddings:
+
+Compute the embedding of each `combined`.
+
+```json
+[
+  { 
+    "sentence": "this is the sentence.",
+    "combined": "this is the sentence. this is the next sentence.",
+    "embedding": [0.002, 0.003, 0.004, ...], // embedding of the combined key text
+    "index": 0
+  },
+  // ...
+]
+```
+
+5. Calculating Distances:
+
+Compute the cosine distances between sequential pairs.
+
+6. Identifying Breakpoints:
+
+Analyze the distances to identify sections where distances are smaller (indicating related content) and areas with larger distances (indicating less related content).
+
+7. Determining Split Points:
+
+Use the 95th percentile of the distances as the threshold for determining breakpoints (can use any other percentile or threshold technique).
 
 ![semantic-chunk](images/semantic-chunk.png)
    
-8. Now split the chunks using the breakpoints
+8. Splitting Chunks:
+
+Split the text into chunks at the identified breakpoints.
+
 9. Done!
 
 
