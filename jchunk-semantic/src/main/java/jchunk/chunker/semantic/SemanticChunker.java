@@ -2,6 +2,8 @@ package jchunk.chunker.semantic;
 
 import jchunk.chunker.core.chunk.Chunk;
 import jchunk.chunker.core.chunk.IChunker;
+import org.nd4j.linalg.api.ndarray.INDArray;
+import org.nd4j.linalg.factory.Nd4j;
 import org.springframework.ai.embedding.EmbeddingModel;
 
 import java.util.Arrays;
@@ -214,20 +216,30 @@ public class SemanticChunker implements IChunker {
 		assert sentence2 != null : "The second sentence embedding cannot be null";
 		assert sentence1.size() == sentence2.size() : "The sentence embeddings must have the same size";
 
-		double dotProduct = 0.0;
-		double norm1 = 0.0;
-		double norm2 = 0.0;
+		INDArray arrayA = Nd4j.create(sentence1.stream().mapToDouble(Double::doubleValue).toArray());
+		INDArray arrayB = Nd4j.create(sentence2.stream().mapToDouble(Double::doubleValue).toArray());
 
-		for (int i = 0; i < sentence1.size(); i++) {
-			dotProduct += sentence1.get(i) * sentence2.get(i);
-			norm1 += Math.pow(sentence1.get(i), 2);
-			norm2 += Math.pow(sentence2.get(i), 2);
-		}
+		arrayA = arrayA.div(arrayA.norm2Number());
+		arrayB = arrayB.div(arrayB.norm2Number());
 
-		norm1 = Math.sqrt(norm1);
-		norm2 = Math.sqrt(norm2);
-
-		return dotProduct / (norm1 * norm2);
+		return Nd4j.getBlasWrapper().dot(arrayA, arrayB);
 	}
+
+	/**
+	 * Calculate the similarity between the sentences embeddings
+	 * @param sentences the list of sentences
+	 * @return the list of similarities (List of double)
+	 */
+	public List<Double> calculateSimilarities(List<Sentence> sentences) {
+		return IntStream.range(0, sentences.size() - 1).parallel().mapToObj(i -> {
+			Sentence sentence1 = sentences.get(i);
+			Sentence sentence2 = sentences.get(i + 1);
+			return cosineSimilarity(sentence1.getEmbedding(), sentence2.getEmbedding());
+		}).collect(Collectors.toList());
+	}
+
+	/**
+	 *
+	 */
 
 }

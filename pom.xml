@@ -47,6 +47,7 @@
 		<!-- production dependencies -->
 		<spring-boot.version>3.3.2</spring-boot.version>
 		<spring-ai.version>1.0.0-M1</spring-ai.version>
+		<deeplearning4j.version>1.0.0-M2.1</deeplearning4j.version>
 
 		<!-- plugin versions -->
 		<spring-javaformat-maven-plugin.version>0.0.39</spring-javaformat-maven-plugin.version>
@@ -70,6 +71,18 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
+			<!-- deep learning dependencies -->
+			<dependency>
+				<groupId>org.deeplearning4j</groupId>
+				<artifactId>deeplearning4j-core</artifactId>
+				<version>${deeplearning4j.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nd4j</groupId>
+				<artifactId>nd4j-native-platform</artifactId>
+				<version>${deeplearning4j.version}</version>
+			</dependency>
+
 		</dependencies>
 	</dependencyManagement>
 
