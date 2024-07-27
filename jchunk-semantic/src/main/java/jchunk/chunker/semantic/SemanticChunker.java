@@ -19,7 +19,7 @@ public class SemanticChunker implements IChunker {
 
 	private final EmbeddingModel embeddingModel;
 
-	private SentenceSplitingStategy sentenceSplitingStategy = SentenceSplitingStategy.DEFAULT;
+	private SentenceSplitingStrategy sentenceSplitingStrategy = SentenceSplitingStrategy.DEFAULT;
 
 	/**
 	 * Constructor
@@ -32,11 +32,11 @@ public class SemanticChunker implements IChunker {
 	/**
 	 * Constructor
 	 * @param embeddingModel the embedding model to use
-	 * @param sentenceSplitingStategy the strategy to split the sentences
+	 * @param sentenceSplitingStrategy the strategy to split the sentences
 	 */
-	public SemanticChunker(EmbeddingModel embeddingModel, SentenceSplitingStategy sentenceSplitingStategy) {
+	public SemanticChunker(EmbeddingModel embeddingModel, SentenceSplitingStrategy sentenceSplitingStrategy) {
 		this.embeddingModel = embeddingModel;
-		this.sentenceSplitingStategy = sentenceSplitingStategy;
+		this.sentenceSplitingStrategy = sentenceSplitingStrategy;
 	}
 
 	@Override
@@ -132,7 +132,7 @@ public class SemanticChunker implements IChunker {
 	 */
 	public List<Sentence> splitSentences(String content) {
 		AtomicInteger index = new AtomicInteger(0);
-		return Arrays.stream(content.split(sentenceSplitingStategy.toString()))
+		return Arrays.stream(content.split(sentenceSplitingStrategy.toString()))
 			.map(sentence -> Sentence.builder().content(sentence).index(index.getAndIncrement()).build())
 			.collect(Collectors.toList());
 	}
