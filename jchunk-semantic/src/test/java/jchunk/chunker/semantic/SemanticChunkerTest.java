@@ -10,7 +10,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
 public class SemanticChunkerTest {
+
 	private final EmbeddingModel embeddingModel;
+
 	private SemanticChunker semanticChunker;
 
 	public SemanticChunkerTest() {
@@ -188,7 +190,7 @@ public class SemanticChunkerTest {
 		configure();
 
 		Mockito.when(embeddingModel.embed(Mockito.anyList()))
-				.thenReturn(List.of(List.of(1.0, 2.0, 3.0), List.of(4.0, 5.0, 6.0)));
+			.thenReturn(List.of(List.of(1.0, 2.0, 3.0), List.of(4.0, 5.0, 6.0)));
 
 		List<SemanticChunker.Sentence> sentences = List.of(
 				SemanticChunker.Sentence.builder().combined("This is a test sentence.").build(),
@@ -196,9 +198,9 @@ public class SemanticChunkerTest {
 
 		List<SemanticChunker.Sentence> expectedResult = List.of(
 				SemanticChunker.Sentence.builder()
-						.combined("This is a test sentence.")
-						.embedding(List.of(1.0, 2.0, 3.0))
-						.build(),
+					.combined("This is a test sentence.")
+					.embedding(List.of(1.0, 2.0, 3.0))
+					.build(),
 				SemanticChunker.Sentence.builder().combined("How are u?").embedding(List.of(4.0, 5.0, 6.0)).build());
 
 		List<SemanticChunker.Sentence> result = this.semanticChunker.embedSentences(sentences);
