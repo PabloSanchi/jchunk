@@ -21,6 +21,9 @@ public class SemanticChunker implements IChunker {
 
 	private final EmbeddingModel embeddingModel;
 
+	private final Config config;
+
+	@Deprecated
 	private SentenceSplitingStrategy sentenceSplitingStrategy = SentenceSplitingStrategy.DEFAULT;
 
 	/**
@@ -28,7 +31,12 @@ public class SemanticChunker implements IChunker {
 	 * @param embeddingModel the embedding model to use
 	 */
 	public SemanticChunker(EmbeddingModel embeddingModel) {
+		this(embeddingModel, Config.defaultConfig());
+	}
+
+	public SemanticChunker(EmbeddingModel embeddingModel, Config config) {
 		this.embeddingModel = embeddingModel;
+		this.config = config;
 	}
 
 	/**
@@ -36,14 +44,76 @@ public class SemanticChunker implements IChunker {
 	 * @param embeddingModel the embedding model to use
 	 * @param sentenceSplitingStrategy the strategy to split the sentences
 	 */
+	@Deprecated
 	public SemanticChunker(EmbeddingModel embeddingModel, SentenceSplitingStrategy sentenceSplitingStrategy) {
 		this.embeddingModel = embeddingModel;
 		this.sentenceSplitingStrategy = sentenceSplitingStrategy;
+		this.config = Config.defaultConfig(); // just to avoid issue with final config
+												// variable
 	}
 
 	@Override
 	public List<Chunk> split(String content) {
-		return null;
+		List<Sentence> sentences = splitSentences(content);
+		sentences = combineSentences(sentences, 1);
+		sentences = embedSentences(sentences);
+		List<Double> similarities = calculateSimilarities(sentences);
+		List<Integer> breakPoints = calculateBreakPoints(similarities);
+		return generateChunks(sentences, breakPoints);
+	}
+
+	public static class Config {
+
+		private final SentenceSplitingStrategy sentenceSplitingStrategy;
+
+		private final Integer percentile;
+
+		public SentenceSplitingStrategy getSentenceSplitingStrategy() {
+			return sentenceSplitingStrategy;
+		}
+
+		public Integer getPercentile() {
+			return percentile;
+		}
+
+		public Config(SentenceSplitingStrategy sentenceSplitingStrategy, Integer percentile) {
+			this.sentenceSplitingStrategy = sentenceSplitingStrategy;
+			this.percentile = percentile;
+		}
+
+		/**
+		 * {@return the default config}
+		 */
+		public static Config defaultConfig() {
+			return builder().build();
+		}
+
+		public static Builder builder() {
+			return new Builder();
+		}
+
+		public static class Builder {
+
+			private SentenceSplitingStrategy sentenceSplitingStrategy = SentenceSplitingStrategy.DEFAULT;
+
+			private Integer percentile = 95;
+
+			public Builder sentenceSplittingStrategy(SentenceSplitingStrategy sentenceSplitingStrategy) {
+				this.sentenceSplitingStrategy = sentenceSplitingStrategy;
+				return this;
+			}
+
+			public Builder percentile(Integer percentile) {
+				this.percentile = percentile;
+				return this;
+			}
+
+			public Config build() {
+				return new Config(sentenceSplitingStrategy, percentile);
+			}
+
+		}
+
 	}
 
 	/**
@@ -134,7 +204,7 @@ public class SemanticChunker implements IChunker {
 	 */
 	public List<Sentence> splitSentences(String content) {
 		AtomicInteger index = new AtomicInteger(0);
-		return Arrays.stream(content.split(sentenceSplitingStrategy.toString()))
+		return Arrays.stream(content.split(this.config.getSentenceSplitingStrategy().getStrategy()))
 			.map(sentence -> Sentence.builder().content(sentence).index(index.getAndIncrement()).build())
 			.collect(Collectors.toList());
 	}
@@ -246,8 +316,7 @@ public class SemanticChunker implements IChunker {
 	public List<Integer> calculateBreakPoints(List<Double> distances) {
 		assert distances != null : "The list of distances cannot be null";
 
-		int PERCENTILE = 95;
-		double breakpointDistanceThreshold = calculatePercentile(distances, PERCENTILE);
+		double breakpointDistanceThreshold = calculatePercentile(distances, config.getPercentile());
 
 		return IntStream.range(0, distances.size())
 			.filter(i -> distances.get(i) >= breakpointDistanceThreshold)
