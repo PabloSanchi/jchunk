@@ -239,7 +239,54 @@ public class SemanticChunker implements IChunker {
 	}
 
 	/**
-	 *
+	 * Calculate the break points indices based on the similarities and the threshold
+	 * @param distances the list of cosine similarities between the sentences
+	 * @return the list of break points indices
 	 */
+	public List<Integer> calculateBreakPoints(List<Double> distances) {
+		assert distances != null : "The list of distances cannot be null";
+
+		int PERCENTILE = 95;
+		double breakpointDistanceThreshold = calculatePercentile(distances, PERCENTILE);
+
+		return IntStream.range(0, distances.size())
+			.filter(i -> distances.get(i) >= breakpointDistanceThreshold)
+			.boxed()
+			.toList();
+	}
+
+	private Double calculatePercentile(List<Double> distances, int percentile) {
+		assert distances != null : "The list of distances cannot be null";
+		assert percentile > 0 && percentile < 100 : "The percentile must be between 0 and 100";
+
+		distances = distances.stream().sorted().toList();
+
+		int rank = (int) Math.ceil(percentile / 100.0 * distances.size());
+		return distances.get(rank - 1);
+	}
+
+	/**
+	 * Generate chunks combining the sentences based on the break points
+	 * @param sentences the list of sentences
+	 * @param breakPoints the list of break points indices
+	 * @return the list of chunks
+	 */
+	public List<Chunk> generateChunks(List<Sentence> sentences, List<Integer> breakPoints) {
+		assert sentences != null : "The list of sentences cannot be null";
+		assert !sentences.isEmpty() : "The list of sentences cannot be empty";
+		assert breakPoints != null : "The list of break points cannot be null";
+
+		AtomicInteger index = new AtomicInteger(0);
+
+		return IntStream.range(0, breakPoints.size() + 1).mapToObj(i -> {
+			int start = i == 0 ? 0 : breakPoints.get(i - 1) + 1;
+			int end = i == breakPoints.size() ? sentences.size() : breakPoints.get(i) + 1;
+			String content = sentences.subList(start, end)
+				.stream()
+				.map(Sentence::getContent)
+				.collect(Collectors.joining(" "));
+			return new Chunk(index.getAndIncrement(), content);
+		}).collect(Collectors.toList());
+	}
 
 }

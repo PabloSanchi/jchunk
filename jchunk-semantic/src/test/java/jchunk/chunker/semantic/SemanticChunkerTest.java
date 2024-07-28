@@ -1,5 +1,6 @@
 package jchunk.chunker.semantic;
 
+import jchunk.chunker.core.chunk.Chunk;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.ai.embedding.EmbeddingModel;
@@ -272,6 +273,52 @@ public class SemanticChunkerTest {
 		double result = this.semanticChunker.cosineSimilarity(embedding1, embedding2);
 
 		assertThat(result).isNaN();
+	}
+
+	@Test
+	public void testGetIndicesAboveThreshold() {
+		configure();
+
+		List<Double> distances = List.of(10.0, 15.0, 20.0, 25.0, 30.0, 35.0, 40.0, 45.0, 50.0, 55.0, 60.0, 65.0, 70.0,
+				75.0);
+
+		List<Integer> expectedIndices = List.of(13);
+
+		List<Integer> actualIndices = this.semanticChunker.calculateBreakPoints(distances);
+
+		assertThat(actualIndices).isEqualTo(expectedIndices);
+	}
+
+	@Test
+	public void testGenerateChunks() {
+
+		configure();
+
+		List<SemanticChunker.Sentence> sentences = List.of(
+				SemanticChunker.Sentence.builder().index(0).content("This").build(),
+				SemanticChunker.Sentence.builder().index(1).content("is").build(),
+				SemanticChunker.Sentence.builder().index(2).content("a").build(),
+				SemanticChunker.Sentence.builder().index(3).content("test.").build(),
+				SemanticChunker.Sentence.builder().index(4).content("We").build(),
+				SemanticChunker.Sentence.builder().index(5).content("are").build(),
+				SemanticChunker.Sentence.builder().index(6).content("writing").build(),
+				SemanticChunker.Sentence.builder().index(7).content("unit").build(),
+				SemanticChunker.Sentence.builder().index(8).content("tests.").build());
+
+		List<Integer> breakPoints = List.of(2, 4, 6);
+
+		List<Chunk> expectedChunks = List.of(new Chunk(0, "This is a"), new Chunk(1, "test. We"),
+				new Chunk(2, "are writing"), new Chunk(3, "unit tests."));
+
+		List<Chunk> actualChunks = this.semanticChunker.generateChunks(sentences, breakPoints);
+
+		assertThat(actualChunks).isNotNull();
+		assertThat(actualChunks.size()).isEqualTo(expectedChunks.size());
+
+		for (int i = 0; i < actualChunks.size(); i++) {
+			assertThat(actualChunks.get(i).id()).isEqualTo(expectedChunks.get(i).id());
+			assertThat(actualChunks.get(i).content()).isEqualTo(expectedChunks.get(i).content());
+		}
 	}
 
 }
