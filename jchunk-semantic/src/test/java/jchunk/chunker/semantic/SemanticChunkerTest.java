@@ -291,7 +291,6 @@ public class SemanticChunkerTest {
 
 	@Test
 	public void testGenerateChunks() {
-
 		configure();
 
 		List<SemanticChunker.Sentence> sentences = List.of(
