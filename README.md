@@ -13,7 +13,7 @@ Feel free to contribute!!
 - [ ] Character Chunker (NOT STARTED)
 - [ ] Recursive Character Text Chunker (NOT STARTED)
 - [ ] Document Specific Chunker (NOT STARTED)
-- [x] Semantic Chunker (IN DEVELOPMENT)
+- [x] Semantic Chunker (BETA VERSION)
 - [ ] Agentic Chunker (NOT STARTED)
 
 
