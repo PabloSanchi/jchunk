@@ -25,11 +25,15 @@ public class SemanticChunkerTest {
 	}
 
 	public void configureLineBreakStrategy() {
-		this.semanticChunker = new SemanticChunker(embeddingModel, SentenceSplitingStrategy.LINE_BREAK);
+		this.semanticChunker = new SemanticChunker(embeddingModel,
+				SemanticChunker.Config.builder()
+					.sentenceSplittingStrategy(SentenceSplitingStrategy.LINE_BREAK)
+					.build());
 	}
 
 	public void configureParagraphBreakStrategy() {
-		this.semanticChunker = new SemanticChunker(embeddingModel, SentenceSplitingStrategy.PARAGRAPH);
+		this.semanticChunker = new SemanticChunker(embeddingModel,
+				SemanticChunker.Config.builder().sentenceSplittingStrategy(SentenceSplitingStrategy.PARAGRAPH).build());
 	}
 
 	@Test
