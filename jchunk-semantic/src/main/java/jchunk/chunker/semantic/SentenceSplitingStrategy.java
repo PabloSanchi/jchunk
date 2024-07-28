@@ -20,4 +20,8 @@ public enum SentenceSplitingStrategy {
 		return this.strategy;
 	}
 
+	public String getStrategy() {
+		return this.strategy;
+	}
+
 }
