@@ -12,6 +12,9 @@ profile:
 #include:
 #  - name: <SomeEnabledInspectionId>
 
+include:
+  - name: JvmCoverageInspection
+
 #Disable inspections
 #exclude:
 #  - name: <SomeDisabledInspectionId>
