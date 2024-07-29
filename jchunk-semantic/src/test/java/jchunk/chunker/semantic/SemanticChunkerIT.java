@@ -47,15 +47,15 @@ public class SemanticChunkerIT {
 
 	@Test
 	public void getSentences() {
-		List<SemanticChunker.Sentence> sentences = this.semanticChunker.splitSentences(mitContent);
+		List<Sentence> sentences = this.semanticChunker.splitSentences(mitContent);
 		assertThat(sentences).isNotEmpty();
 		assertThat(sentences).hasSize(317);
 	}
 
 	@Test
 	public void combineSentences() {
-		List<SemanticChunker.Sentence> sentences = this.semanticChunker.splitSentences(mitContent);
-		List<SemanticChunker.Sentence> combined = this.semanticChunker.combineSentences(sentences, 1);
+		List<Sentence> sentences = this.semanticChunker.splitSentences(mitContent);
+		List<Sentence> combined = this.semanticChunker.combineSentences(sentences, 1);
 
 		assertThat(combined).isNotEmpty();
 		assertThat(combined).hasSize(317);
@@ -68,9 +68,9 @@ public class SemanticChunkerIT {
 
 	@Test
 	public void embedChunks() {
-		List<SemanticChunker.Sentence> sentences = this.semanticChunker.splitSentences(mitContent);
-		List<SemanticChunker.Sentence> combined = this.semanticChunker.combineSentences(sentences, 1);
-		List<SemanticChunker.Sentence> embedded = this.semanticChunker.embedSentences(combined);
+		List<Sentence> sentences = this.semanticChunker.splitSentences(mitContent);
+		List<Sentence> combined = this.semanticChunker.combineSentences(sentences, 1);
+		List<Sentence> embedded = this.semanticChunker.embedSentences(combined);
 
 		assertThat(embedded).isNotEmpty();
 		assertThat(embedded).hasSize(317);
@@ -85,9 +85,9 @@ public class SemanticChunkerIT {
 
 	@Test
 	public void getCosineDistancesArray() {
-		List<SemanticChunker.Sentence> sentences = this.semanticChunker.splitSentences(mitContent);
-		List<SemanticChunker.Sentence> combined = this.semanticChunker.combineSentences(sentences, 1);
-		List<SemanticChunker.Sentence> embedded = this.semanticChunker.embedSentences(combined);
+		List<Sentence> sentences = this.semanticChunker.splitSentences(mitContent);
+		List<Sentence> combined = this.semanticChunker.combineSentences(sentences, 1);
+		List<Sentence> embedded = this.semanticChunker.embedSentences(combined);
 		List<Double> distances = this.semanticChunker.calculateSimilarities(embedded);
 
 		assertThat(distances).hasSize(sentences.size() - 1);
