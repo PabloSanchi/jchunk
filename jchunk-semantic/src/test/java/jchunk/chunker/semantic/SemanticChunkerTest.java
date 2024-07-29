@@ -26,28 +26,25 @@ public class SemanticChunkerTest {
 
 	public void configureLineBreakStrategy() {
 		this.semanticChunker = new SemanticChunker(embeddingModel,
-				SemanticChunker.Config.builder()
-					.sentenceSplittingStrategy(SentenceSplitingStrategy.LINE_BREAK)
-					.build());
+				Config.builder().sentenceSplittingStrategy(SentenceSplitingStrategy.LINE_BREAK).build());
 	}
 
 	public void configureParagraphBreakStrategy() {
 		this.semanticChunker = new SemanticChunker(embeddingModel,
-				SemanticChunker.Config.builder().sentenceSplittingStrategy(SentenceSplitingStrategy.PARAGRAPH).build());
+				Config.builder().sentenceSplittingStrategy(SentenceSplitingStrategy.PARAGRAPH).build());
 	}
 
 	@Test
 	public void splitSentenceDefaultStrategyTest() {
 		configure();
 
-		List<SemanticChunker.Sentence> expectedResult = List.of(
-				SemanticChunker.Sentence.builder().content("This is a test sentence.").build(),
-				SemanticChunker.Sentence.builder().content("How are u?").build(),
-				SemanticChunker.Sentence.builder().content("I am fine thanks\nI am a test sentence!").build(),
-				SemanticChunker.Sentence.builder().content("sure").build());
+		List<Sentence> expectedResult = List.of(Sentence.builder().content("This is a test sentence.").build(),
+				Sentence.builder().content("How are u?").build(),
+				Sentence.builder().content("I am fine thanks\nI am a test sentence!").build(),
+				Sentence.builder().content("sure").build());
 
 		String content = "This is a test sentence. How are u? I am fine thanks\nI am a test sentence! sure";
-		List<SemanticChunker.Sentence> result = this.semanticChunker.splitSentences(content);
+		List<Sentence> result = this.semanticChunker.splitSentences(content);
 
 		assertThat(result).isNotNull();
 		assertThat(result.size()).isEqualTo(expectedResult.size());
@@ -62,12 +59,12 @@ public class SemanticChunkerTest {
 
 		configureLineBreakStrategy();
 
-		List<SemanticChunker.Sentence> expectedResult = List.of(SemanticChunker.Sentence.builder()
-			.content("This is a test sentence. How are u? I am fine thanks")
-			.build(), SemanticChunker.Sentence.builder().content("I am a test sentence! sure").build());
+		List<Sentence> expectedResult = List.of(
+				Sentence.builder().content("This is a test sentence. How are u? I am fine thanks").build(),
+				Sentence.builder().content("I am a test sentence! sure").build());
 
 		String content = "This is a test sentence. How are u? I am fine thanks\nI am a test sentence! sure";
-		List<SemanticChunker.Sentence> result = this.semanticChunker.splitSentences(content);
+		List<Sentence> result = this.semanticChunker.splitSentences(content);
 
 		assertThat(result).isNotNull();
 		assertThat(result.size()).isEqualTo(expectedResult.size());
@@ -81,13 +78,12 @@ public class SemanticChunkerTest {
 
 		configureParagraphBreakStrategy();
 
-		List<SemanticChunker.Sentence> expectedResult = List.of(
-				SemanticChunker.Sentence.builder().index(0).content("This is a test sentence.").build(),
-				SemanticChunker.Sentence.builder().index(1).content("How are u? I am fine thanks").build(),
-				SemanticChunker.Sentence.builder().index(2).content("I am a test sentence!\nsure").build());
+		List<Sentence> expectedResult = List.of(Sentence.builder().index(0).content("This is a test sentence.").build(),
+				Sentence.builder().index(1).content("How are u? I am fine thanks").build(),
+				Sentence.builder().index(2).content("I am a test sentence!\nsure").build());
 
 		String content = "This is a test sentence.\n\nHow are u? I am fine thanks\n\nI am a test sentence!\nsure";
-		List<SemanticChunker.Sentence> result = this.semanticChunker.splitSentences(content);
+		List<Sentence> result = this.semanticChunker.splitSentences(content);
 
 		assertThat(result).isNotNull();
 		assertThat(result.size()).isEqualTo(expectedResult.size());
@@ -101,29 +97,22 @@ public class SemanticChunkerTest {
 	public void combineSentencesSuccessTest() {
 		configure();
 		Integer bufferSize = 2;
-		List<SemanticChunker.Sentence> input = List.of(
-				SemanticChunker.Sentence.builder().index(0).content("This").build(),
-				SemanticChunker.Sentence.builder().index(1).content("is").build(),
-				SemanticChunker.Sentence.builder().index(2).content("a").build(),
-				SemanticChunker.Sentence.builder().index(3).content("sentence").build(),
-				SemanticChunker.Sentence.builder().index(4).content("for").build(),
-				SemanticChunker.Sentence.builder().index(5).content("you").build(),
-				SemanticChunker.Sentence.builder().index(6).content("mate").build());
+		List<Sentence> input = List.of(Sentence.builder().index(0).content("This").build(),
+				Sentence.builder().index(1).content("is").build(), Sentence.builder().index(2).content("a").build(),
+				Sentence.builder().index(3).content("sentence").build(),
+				Sentence.builder().index(4).content("for").build(), Sentence.builder().index(5).content("you").build(),
+				Sentence.builder().index(6).content("mate").build());
 
-		List<SemanticChunker.Sentence> expectedResult = List.of(
-				SemanticChunker.Sentence.builder().index(0).content("This").combined("This is a").build(),
-				SemanticChunker.Sentence.builder().index(1).content("is").combined("This is a sentence").build(),
-				SemanticChunker.Sentence.builder().index(2).content("a").combined("This is a sentence for").build(),
-				SemanticChunker.Sentence.builder()
-					.index(3)
-					.content("sentence")
-					.combined("is a sentence for you")
-					.build(),
-				SemanticChunker.Sentence.builder().index(4).content("for").combined("a sentence for you mate").build(),
-				SemanticChunker.Sentence.builder().index(5).content("you").combined("sentence for you mate").build(),
-				SemanticChunker.Sentence.builder().index(6).content("mate").combined("for you mate").build());
+		List<Sentence> expectedResult = List.of(
+				Sentence.builder().index(0).content("This").combined("This is a").build(),
+				Sentence.builder().index(1).content("is").combined("This is a sentence").build(),
+				Sentence.builder().index(2).content("a").combined("This is a sentence for").build(),
+				Sentence.builder().index(3).content("sentence").combined("is a sentence for you").build(),
+				Sentence.builder().index(4).content("for").combined("a sentence for you mate").build(),
+				Sentence.builder().index(5).content("you").combined("sentence for you mate").build(),
+				Sentence.builder().index(6).content("mate").combined("for you mate").build());
 
-		List<SemanticChunker.Sentence> result = this.semanticChunker.combineSentences(input, bufferSize);
+		List<Sentence> result = this.semanticChunker.combineSentences(input, bufferSize);
 
 		assertThat(result).isNotNull();
 		assertThat(result.size()).isEqualTo(expectedResult.size());
@@ -139,7 +128,7 @@ public class SemanticChunkerTest {
 	public void combineSentencesWithBufferSizeEqualZeroTest() {
 		configure();
 		Integer bufferSize = 0;
-		List<SemanticChunker.Sentence> input = List.of(SemanticChunker.Sentence.builder().content("This").build());
+		List<Sentence> input = List.of(Sentence.builder().content("This").build());
 
 		assertThatThrownBy(() -> this.semanticChunker.combineSentences(input, bufferSize))
 			.isInstanceOf(AssertionError.class)
@@ -150,7 +139,7 @@ public class SemanticChunkerTest {
 	public void combineSentencesWithBufferSizeIsNullTest() {
 		configure();
 		Integer bufferSize = null;
-		List<SemanticChunker.Sentence> input = List.of(SemanticChunker.Sentence.builder().content("This").build());
+		List<Sentence> input = List.of(Sentence.builder().content("This").build());
 
 		assertThatThrownBy(() -> this.semanticChunker.combineSentences(input, bufferSize))
 			.isInstanceOf(AssertionError.class)
@@ -161,7 +150,7 @@ public class SemanticChunkerTest {
 	public void combineSentencesWithBufferSizeGreaterThanInputLengthTest() {
 		configure();
 		Integer bufferSize = 1;
-		List<SemanticChunker.Sentence> input = List.of(SemanticChunker.Sentence.builder().content("This").build());
+		List<Sentence> input = List.of(Sentence.builder().content("This").build());
 
 		assertThatThrownBy(() -> this.semanticChunker.combineSentences(input, bufferSize))
 			.isInstanceOf(AssertionError.class)
@@ -172,7 +161,7 @@ public class SemanticChunkerTest {
 	public void combineSentencesWithInputIsNullTest() {
 		configure();
 		Integer bufferSize = 2;
-		List<SemanticChunker.Sentence> input = null;
+		List<Sentence> input = null;
 
 		assertThatThrownBy(() -> this.semanticChunker.combineSentences(input, bufferSize))
 			.isInstanceOf(AssertionError.class)
@@ -183,7 +172,7 @@ public class SemanticChunkerTest {
 	public void combineSentencesWithInputIsEmptyTest() {
 		configure();
 		Integer bufferSize = 2;
-		List<SemanticChunker.Sentence> input = List.of();
+		List<Sentence> input = List.of();
 
 		assertThatThrownBy(() -> this.semanticChunker.combineSentences(input, bufferSize))
 			.isInstanceOf(AssertionError.class)
@@ -197,18 +186,14 @@ public class SemanticChunkerTest {
 		Mockito.when(embeddingModel.embed(Mockito.anyList()))
 			.thenReturn(List.of(List.of(1.0, 2.0, 3.0), List.of(4.0, 5.0, 6.0)));
 
-		List<SemanticChunker.Sentence> sentences = List.of(
-				SemanticChunker.Sentence.builder().combined("This is a test sentence.").build(),
-				SemanticChunker.Sentence.builder().combined("How are u?").build());
+		List<Sentence> sentences = List.of(Sentence.builder().combined("This is a test sentence.").build(),
+				Sentence.builder().combined("How are u?").build());
 
-		List<SemanticChunker.Sentence> expectedResult = List.of(
-				SemanticChunker.Sentence.builder()
-					.combined("This is a test sentence.")
-					.embedding(List.of(1.0, 2.0, 3.0))
-					.build(),
-				SemanticChunker.Sentence.builder().combined("How are u?").embedding(List.of(4.0, 5.0, 6.0)).build());
+		List<Sentence> expectedResult = List.of(
+				Sentence.builder().combined("This is a test sentence.").embedding(List.of(1.0, 2.0, 3.0)).build(),
+				Sentence.builder().combined("How are u?").embedding(List.of(4.0, 5.0, 6.0)).build());
 
-		List<SemanticChunker.Sentence> result = this.semanticChunker.embedSentences(sentences);
+		List<Sentence> result = this.semanticChunker.embedSentences(sentences);
 
 		assertThat(result).isNotNull();
 
@@ -297,16 +282,13 @@ public class SemanticChunkerTest {
 	public void testGenerateChunks() {
 		configure();
 
-		List<SemanticChunker.Sentence> sentences = List.of(
-				SemanticChunker.Sentence.builder().index(0).content("This").build(),
-				SemanticChunker.Sentence.builder().index(1).content("is").build(),
-				SemanticChunker.Sentence.builder().index(2).content("a").build(),
-				SemanticChunker.Sentence.builder().index(3).content("test.").build(),
-				SemanticChunker.Sentence.builder().index(4).content("We").build(),
-				SemanticChunker.Sentence.builder().index(5).content("are").build(),
-				SemanticChunker.Sentence.builder().index(6).content("writing").build(),
-				SemanticChunker.Sentence.builder().index(7).content("unit").build(),
-				SemanticChunker.Sentence.builder().index(8).content("tests.").build());
+		List<Sentence> sentences = List.of(Sentence.builder().index(0).content("This").build(),
+				Sentence.builder().index(1).content("is").build(), Sentence.builder().index(2).content("a").build(),
+				Sentence.builder().index(3).content("test.").build(), Sentence.builder().index(4).content("We").build(),
+				Sentence.builder().index(5).content("are").build(),
+				Sentence.builder().index(6).content("writing").build(),
+				Sentence.builder().index(7).content("unit").build(),
+				Sentence.builder().index(8).content("tests.").build());
 
 		List<Integer> breakPoints = List.of(2, 4, 6);
 
