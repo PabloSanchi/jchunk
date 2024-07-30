@@ -14,6 +14,8 @@ import java.util.stream.IntStream;
 /**
  * Utility class for semantic chunking. Wraps the different methods needed to chunk a text
  * semantically.
+ *
+ * @author Pablo Sanchidrian Herrera
  */
 public class Utils {
 
