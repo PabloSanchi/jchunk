@@ -11,6 +11,8 @@ public class Config {
 
 	private final Integer percentile;
 
+	private final Integer bufferSize;
+
 	public SentenceSplitingStrategy getSentenceSplitingStrategy() {
 		return sentenceSplitingStrategy;
 	}
@@ -19,9 +21,10 @@ public class Config {
 		return percentile;
 	}
 
-	public Config(SentenceSplitingStrategy sentenceSplitingStrategy, Integer percentile) {
+	public Config(SentenceSplitingStrategy sentenceSplitingStrategy, Integer percentile, Integer bufferSize) {
 		this.sentenceSplitingStrategy = sentenceSplitingStrategy;
 		this.percentile = percentile;
+		this.bufferSize = bufferSize;
 	}
 
 	/**
@@ -41,6 +44,8 @@ public class Config {
 
 		private Integer percentile = 95;
 
+		private Integer bufferSize = 1;
+
 		public Builder sentenceSplittingStrategy(SentenceSplitingStrategy sentenceSplitingStrategy) {
 			this.sentenceSplitingStrategy = sentenceSplitingStrategy;
 			return this;
@@ -51,8 +56,13 @@ public class Config {
 			return this;
 		}
 
+		public Builder bufferSize(Integer bufferSize) {
+			this.bufferSize = bufferSize;
+			return this;
+		}
+
 		public Config build() {
-			return new Config(sentenceSplitingStrategy, percentile);
+			return new Config(sentenceSplitingStrategy, percentile, bufferSize);
 		}
 
 	}
