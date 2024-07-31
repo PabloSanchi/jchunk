@@ -117,4 +117,6 @@ Split the text into chunks at the identified breakpoints.
 
 ## Agentic Chunker
 
+# FUTURE
 
+Frontend to test the different chunkers and see the results in a more visual way.
