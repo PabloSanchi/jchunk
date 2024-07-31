@@ -117,6 +117,36 @@ Split the text into chunks at the identified breakpoints.
 
 ## Agentic Chunker
 
+## Building
+
+To build with running unit tests
+
+```sh
+./mvnw clean package
+```
+
+To reformat using the java-format plugin
+
+```sh
+./mvnw spring-javaformat:apply
+```
+
+To update the year on license headers using the license-maven-plugin
+
+```sh
+./mvnw license:update-file-header -Plicense
+```
+
+To check javadocs using the javadoc:javadoc
+
+```sh
+./mvnw javadoc:javadoc -Pjavadoc
+```
+
+## Contributing
+
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
+
 # FUTURE
 
 Frontend to test the different chunkers and see the results in a more visual way.
