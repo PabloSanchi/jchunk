@@ -3,7 +3,7 @@ package jchunk.chunker.recursive;
 import java.util.List;
 
 /**
- * {@link Config} is a class that holds the configuration for the {@link RecursiveCharcterChunker}.
+ * {@link Config} is a class that holds the configuration for the {@link RecursiveCharacterChunker}.
  * @author Pablo Sanchidrian Herrera
  */
 public class Config {

@@ -1,5 +1,5 @@
 import jchunk.chunker.core.chunk.Chunk;
-import jchunk.chunker.recursive.RecursiveCharcterChunker;
+import jchunk.chunker.recursive.RecursiveCharacterChunker;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -8,7 +8,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class RecursiveCharacterChunkerTest {
 
-	RecursiveCharcterChunker chunker = new RecursiveCharcterChunker();
+	RecursiveCharacterChunker chunker = new RecursiveCharacterChunker();
 
 	static String content = """
 			One of the most important things I didn't understand about the world when I was a child is the degree to which the returns for performance are superlinear.

@@ -5,15 +5,15 @@ import jchunk.chunker.core.chunk.IChunker;
 
 import java.util.List;
 
-public class RecursiveCharcterChunker implements IChunker {
+public class RecursiveCharacterChunker implements IChunker {
 
 	private final Config config;
 
-	public RecursiveCharcterChunker() {
+	public RecursiveCharacterChunker() {
 		this(Config.defaultConfig());
 	}
 
-	public RecursiveCharcterChunker(Config config) {
+	public RecursiveCharacterChunker(Config config) {
 		this.config = config;
 	}
 
