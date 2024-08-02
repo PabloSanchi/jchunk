@@ -3,7 +3,9 @@ package jchunk.chunker.recursive;
 import java.util.List;
 
 /**
- * {@link Config} is a class that holds the configuration for the {@link RecursiveCharacterChunker}.
+ * {@link Config} is a class that holds the configuration for the
+ * {@link RecursiveCharacterChunker}.
+ *
  * @author Pablo Sanchidrian Herrera
  */
 public class Config {
@@ -27,7 +29,7 @@ public class Config {
 	}
 
 	public Config(Integer chunkSize, Integer chunkOverlap, List<String> separators) {
-        assert chunkOverlap < chunkSize;
+		assert chunkOverlap < chunkSize;
 
 		this.chunkSize = chunkSize;
 		this.chunkOverlap = chunkOverlap;
