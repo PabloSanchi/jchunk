@@ -70,6 +70,17 @@ Separators are specific character sequences used to split the text. For instance
 - Separator: ". "
 - Output Chunks: ["This is an example", "Let's split on periods", "Okay?"]
 
+
+### Pros and Cons
+
+**Pros**
+- Easy & Simple: Character splitting is straightforward to implement and understand.
+- Basic Segmentation: It provides a basic way to segment text into smaller pieces.
+
+**Cons**
+- Rigid: Does not consider the structure or context of the text.
+- Duplicate Data: Chunk overlap creates duplicate data, which might not be efficient.
+
 ## Recursive Character Text Chunker
 
 ## Document Specific Chunker
