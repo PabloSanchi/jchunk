@@ -7,13 +7,15 @@ package jchunk.chunker.fixed;
  */
 public class Config {
 
-	private Integer chunkSize;
+	private final Integer chunkSize;
 
-	private Integer chunkOverlap;
+	private final Integer chunkOverlap;
 
-	private String separator;
+	private final String delimiter;
 
-	private Boolean trimWhitespace;
+	private final Boolean trimWhitespace;
+
+	private final Delimiter keepDelimiter;
 
 	public Integer getChunkSize() {
 		return chunkSize;
@@ -23,19 +25,25 @@ public class Config {
 		return chunkOverlap;
 	}
 
-	public String getSeparator() {
-		return separator;
+	public String getDelimiter() {
+		return delimiter;
 	}
 
 	public Boolean getTrimWhitespace() {
 		return trimWhitespace;
 	}
 
-	public Config(Integer chunkSize, Integer chunkOverlap, String separator, Boolean trimWhitespace) {
+	public Delimiter getKeepDelimiter() {
+		return keepDelimiter;
+	}
+
+	public Config(Integer chunkSize, Integer chunkOverlap, String delimiter, Boolean trimWhitespace,
+			Delimiter keepDelimiter) {
 		this.chunkSize = chunkSize;
 		this.chunkOverlap = chunkOverlap;
-		this.separator = separator;
+		this.delimiter = delimiter;
 		this.trimWhitespace = trimWhitespace;
+		this.keepDelimiter = keepDelimiter;
 	}
 
 	/**
@@ -59,6 +67,8 @@ public class Config {
 
 		private Boolean trimWhitespace = true;
 
+		private Delimiter keepDelimiter = Delimiter.NONE;
+
 		public Builder chunkSize(Integer chunkSize) {
 			this.chunkSize = chunkSize;
 			return this;
@@ -79,10 +89,25 @@ public class Config {
 			return this;
 		}
 
+		public Builder keepDelimiter(Delimiter keepDelimiter) {
+			this.keepDelimiter = keepDelimiter;
+			return this;
+		}
+
 		public Config build() {
 			assert chunkSize > chunkOverlap : "Chunk size must be greater than chunk overlap";
-			return new Config(chunkSize, chunkOverlap, separator, trimWhitespace);
+			return new Config(chunkSize, chunkOverlap, separator, trimWhitespace, keepDelimiter);
 		}
+
+	}
+
+	/**
+	 * Enum to represent the delimiter configuration NONE: No delimiter START: Delimiter
+	 * at the start of the chunk END: Delimiter at the end of the chunk
+	 */
+	public enum Delimiter {
+
+		NONE, START, END
 
 	}
 
