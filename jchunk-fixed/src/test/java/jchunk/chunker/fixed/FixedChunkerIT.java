@@ -43,4 +43,20 @@ public class FixedChunkerIT {
 		assertThat(chunks).containsExactlyElementsOf(expectedChunks);
 	}
 
+	@Test
+	public void testSplitWithCustomConfigNoWhiteSpace() {
+		Config config = Config.builder().chunkSize(35).chunkOverlap(4).separator("").trimWhitespace(false).build();
+
+		chunker = new FixedChunker(config);
+
+		List<Chunk> expectedChunks = List.of(new Chunk(0, "This is the text I would like to ch"),
+				new Chunk(1, "unk up. It is the example text for "), new Chunk(2, "this exercise"));
+
+		List<Chunk> chunks = chunker.split(CONTENT);
+
+		assertThat(chunks).isNotNull();
+		assertThat(chunks.size()).isEqualTo(3);
+		assertThat(chunks).containsExactlyElementsOf(expectedChunks);
+	}
+
 }
