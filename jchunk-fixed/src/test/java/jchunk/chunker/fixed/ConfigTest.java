@@ -22,7 +22,7 @@ public class ConfigTest {
 		Config config = Config.builder()
 			.chunkSize(35)
 			.chunkOverlap(4)
-			.separator("")
+			.delimiter("")
 			.trimWhitespace(false)
 			.keepDelimiter(Config.Delimiter.START)
 			.build();

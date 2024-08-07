@@ -63,7 +63,7 @@ public class Config {
 
 		private Integer chunkOverlap = 100;
 
-		private String separator = " ";
+		private String delimiter = " ";
 
 		private Boolean trimWhitespace = true;
 
@@ -79,8 +79,8 @@ public class Config {
 			return this;
 		}
 
-		public Builder separator(String separator) {
-			this.separator = separator;
+		public Builder delimiter(String delimiter) {
+			this.delimiter = delimiter;
 			return this;
 		}
 
@@ -96,7 +96,7 @@ public class Config {
 
 		public Config build() {
 			assert chunkSize > chunkOverlap : "Chunk size must be greater than chunk overlap";
-			return new Config(chunkSize, chunkOverlap, separator, trimWhitespace, keepDelimiter);
+			return new Config(chunkSize, chunkOverlap, delimiter, trimWhitespace, keepDelimiter);
 		}
 
 	}

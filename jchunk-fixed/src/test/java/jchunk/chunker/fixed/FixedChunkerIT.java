@@ -27,7 +27,7 @@ public class FixedChunkerIT {
 
 	@Test
 	public void testSplitWithCustomConfig() {
-		Config config = Config.builder().chunkSize(35).chunkOverlap(4).separator("").build();
+		Config config = Config.builder().chunkSize(35).chunkOverlap(4).delimiter("").build();
 
 		chunker = new FixedChunker(config);
 
@@ -43,7 +43,7 @@ public class FixedChunkerIT {
 
 	@Test
 	public void testSplitWithCustomConfigNoWhiteSpace() {
-		Config config = Config.builder().chunkSize(35).chunkOverlap(0).separator("").trimWhitespace(false).build();
+		Config config = Config.builder().chunkSize(35).chunkOverlap(0).delimiter("").trimWhitespace(false).build();
 
 		chunker = new FixedChunker(config);
 
@@ -62,7 +62,7 @@ public class FixedChunkerIT {
 		Config config = Config.builder()
 			.chunkSize(35)
 			.chunkOverlap(0)
-			.separator("ch")
+			.delimiter("ch")
 			.trimWhitespace(true)
 			.keepDelimiter(Config.Delimiter.NONE)
 			.build();
