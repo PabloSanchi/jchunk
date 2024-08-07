@@ -10,7 +10,7 @@ For now there is only [Pablo Sanchidrian](https://github.com/PabloSanchi) develo
 Feel free to contribute!!
 
 ## ROAD MAP
-- [ ] Character Chunker (NOT STARTED)
+- [x] Fixed Character Chunker (DEVELOPMENT)
 - [ ] Recursive Character Text Chunker (NOT STARTED)
 - [ ] Document Specific Chunker (NOT STARTED)
 - [x] Semantic Chunker (PRE-RELEASE)
