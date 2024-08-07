@@ -12,18 +12,26 @@ public class ConfigTest {
 
 		assertThat(config.getChunkSize()).isEqualTo(1000);
 		assertThat(config.getChunkOverlap()).isEqualTo(100);
-		assertThat(config.getSeparator()).isEqualTo(" ");
+		assertThat(config.getDelimiter()).isEqualTo(" ");
 		assertThat(config.getTrimWhitespace()).isTrue();
+		assertThat(config.getKeepDelimiter()).isEqualTo(Config.Delimiter.NONE);
 	}
 
 	@Test
 	public void testConfigBuilder() {
-		Config config = Config.builder().chunkSize(35).chunkOverlap(4).separator("").trimWhitespace(false).build();
+		Config config = Config.builder()
+			.chunkSize(35)
+			.chunkOverlap(4)
+			.separator("")
+			.trimWhitespace(false)
+			.keepDelimiter(Config.Delimiter.START)
+			.build();
 
 		assertThat(config.getChunkSize()).isEqualTo(35);
 		assertThat(config.getChunkOverlap()).isEqualTo(4);
-		assertThat(config.getSeparator()).isEqualTo("");
+		assertThat(config.getDelimiter()).isEqualTo("");
 		assertThat(config.getTrimWhitespace()).isFalse();
+		assertThat(config.getKeepDelimiter()).isEqualTo(Config.Delimiter.START);
 	}
 
 }
