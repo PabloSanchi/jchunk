@@ -26,10 +26,8 @@ public class Utils {
 		String delimiter = config.getDelimiter();
 		Config.Delimiter keepDelimiter = config.getKeepDelimiter();
 
-		if(delimiter.isBlank()) {
-			return content.chars()
-					.mapToObj(c -> String.valueOf((char) c))
-					.collect(Collectors.toList());
+		if (delimiter.isBlank()) {
+			return content.chars().mapToObj(c -> String.valueOf((char) c)).collect(Collectors.toList());
 		}
 
 		if (keepDelimiter != Config.Delimiter.NONE) {
@@ -76,7 +74,6 @@ public class Utils {
 
 		AtomicInteger chunkIndex = new AtomicInteger(0);
 
-
 		for (String sentence : sentences) {
 			int sentenceLength = sentence.length();
 
@@ -89,10 +86,9 @@ public class Utils {
 					String generatedSentence = joinSentences(currentChunk, delimiter, trimWhitespace);
 					chunks.add(new Chunk(chunkIndex.getAndIncrement(), generatedSentence));
 
-					while (
-							currentLen > chunkOverlap ||
-							(currentLen + sentenceLength + (currentChunk.isEmpty() ? 0 : delimiterLen) > chunkSize && currentLen > 0)
-					) {
+					while (currentLen > chunkOverlap
+							|| (currentLen + sentenceLength + (currentChunk.isEmpty() ? 0 : delimiterLen) > chunkSize
+									&& currentLen > 0)) {
 						currentLen -= currentChunk.removeFirst().length() + (currentChunk.isEmpty() ? 0 : delimiterLen);
 					}
 				}
