@@ -16,6 +16,7 @@
 	<modules>
 		<module>jchunk-semantic</module>
 		<module>jchunk-core</module>
+		<module>jchunk-fixed</module>
 	</modules>
 
 	<scm>
