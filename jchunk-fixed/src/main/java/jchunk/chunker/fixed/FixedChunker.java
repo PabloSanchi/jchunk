@@ -24,7 +24,8 @@ public class FixedChunker implements IChunker {
 
 	@Override
 	public List<Chunk> split(String content) {
-		return null;
+		List<String> sentences = Utils.splitIntoSentences(content, config);
+		return Utils.mergeSentences(sentences, config);
 	}
 
 }
