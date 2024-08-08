@@ -21,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @Disabled("Only for manual testing purposes.")
-public class SemanticChunkerIT {
+class SemanticChunkerIT {
 
 	@Autowired
 	private SemanticChunker semanticChunker;
@@ -29,11 +29,9 @@ public class SemanticChunkerIT {
 	@Autowired
 	private EmbeddingModel embeddingModel;
 
-	private final Integer EMBEDDING_MODEL_DIMENSION = 384;
+	private final String mitContent = getText("classpath:/data/mit.txt");
 
-	private String mitContent = getText("classpath:/data/mit.txt");
-
-	public static String getText(String uri) {
+	static String getText(String uri) {
 		var resource = new DefaultResourceLoader().getResource(uri);
 		try {
 			return resource.getContentAsString(StandardCharsets.UTF_8);
@@ -44,19 +42,18 @@ public class SemanticChunkerIT {
 	}
 
 	@Test
-	public void documentContentLoaded() {
+	void documentContentLoaded() {
 		assertThat(mitContent).isNotBlank();
 	}
 
 	@Test
-	public void getSentences() {
+	void getSentences() {
 		List<Sentence> sentences = Utils.splitSentences(mitContent, SentenceSplitingStrategy.DEFAULT);
-		assertThat(sentences).isNotEmpty();
-		assertThat(sentences).hasSize(317);
+		assertThat(sentences).isNotEmpty().hasSize(317);
 	}
 
 	@Test
-	public void combineSentences() {
+	void combineSentences() {
 		List<Sentence> sentences = Utils.splitSentences(mitContent, SentenceSplitingStrategy.DEFAULT);
 		List<Sentence> combined = Utils.combineSentences(sentences, 1);
 
@@ -70,24 +67,24 @@ public class SemanticChunkerIT {
 	}
 
 	@Test
-	public void embedChunks() {
+	void embedChunks() {
+		int EMBEDDING_MODEL_DIMENSION = 384;
+
 		List<Sentence> sentences = Utils.splitSentences(mitContent, SentenceSplitingStrategy.DEFAULT);
 		List<Sentence> combined = Utils.combineSentences(sentences, 1);
 		List<Sentence> embedded = Utils.embedSentences(embeddingModel, combined);
 
-		assertThat(embedded).isNotEmpty();
-		assertThat(embedded).hasSize(317);
+		assertThat(embedded).isNotEmpty().hasSize(317);
 
 		assertThat(embedded.getFirst().getIndex()).isEqualTo(0);
 		assertThat(embedded.getFirst().getContent()).isEqualTo("\n\nWant to start a startup?");
 		assertThat(embedded.getFirst().getCombined())
 			.isEqualTo("\n\nWant to start a startup? Get funded by\nY Combinator.");
-		assertThat(embedded.getFirst().getEmbedding()).isNotNull();
-		assertThat(embedded.getFirst().getEmbedding()).hasSize(EMBEDDING_MODEL_DIMENSION);
+		assertThat(embedded.getFirst().getEmbedding()).isNotNull().hasSize(EMBEDDING_MODEL_DIMENSION);
 	}
 
 	@Test
-	public void getCosineDistancesArray() {
+	void getCosineDistancesArray() {
 		List<Sentence> sentences = Utils.splitSentences(mitContent, SentenceSplitingStrategy.DEFAULT);
 		List<Sentence> combined = Utils.combineSentences(sentences, 1);
 		List<Sentence> embedded = Utils.embedSentences(embeddingModel, combined);
@@ -97,7 +94,7 @@ public class SemanticChunkerIT {
 	}
 
 	@Test
-	public void getChunks() {
+	void getChunks() {
 		List<Chunk> chunks = this.semanticChunker.split(mitContent);
 		assertThat(chunks).isNotEmpty();
 	}

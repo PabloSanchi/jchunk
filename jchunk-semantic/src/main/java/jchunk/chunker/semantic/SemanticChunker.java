@@ -33,7 +33,7 @@ public class SemanticChunker implements IChunker {
 	@Override
 	public List<Chunk> split(String content) {
 		List<Sentence> sentences = Utils.splitSentences(content, config.getSentenceSplitingStrategy());
-		sentences = Utils.combineSentences(sentences, 1);
+		sentences = Utils.combineSentences(sentences, config.getBufferSize());
 		sentences = Utils.embedSentences(embeddingModel, sentences);
 		List<Double> similarities = Utils.calculateSimilarities(sentences);
 		List<Integer> breakPoints = Utils.calculateBreakPoints(similarities, config.getPercentile());
