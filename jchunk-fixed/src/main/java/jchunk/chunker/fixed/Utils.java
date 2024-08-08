@@ -7,14 +7,19 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class Utils {
 
+	/**
+	 * private constructor to hide the implicit public one
+	 */
+	private Utils() {
+	}
+
 	private static final Logger logger = Logger.getLogger(Utils.class.getName());
 
-	public static final String LONGER_THAN_THE_SPECIFIED_ = "Created a chunk of size %d, which is longer than the specified %d";
+	public static final String LONGER_THAN_THE_SPECIFIED = "Created a chunk of size %d, which is longer than the specified %d";
 
 	/**
 	 * Splits the content into sentences using the delimiter.
@@ -27,31 +32,65 @@ public class Utils {
 		Config.Delimiter keepDelimiter = config.getKeepDelimiter();
 
 		if (delimiter.isBlank()) {
-			return content.chars().mapToObj(c -> String.valueOf((char) c)).collect(Collectors.toList());
+			return content.chars().mapToObj(c -> String.valueOf((char) c)).toList();
 		}
 
-		if (keepDelimiter != Config.Delimiter.NONE) {
-			String withDelimiter = "((?<=%1$s)|(?=%1$s))";
-			List<String> preSplits = new ArrayList<>(List.of(content.split(String.format(withDelimiter, delimiter))));
-			List<String> splits = new ArrayList<>();
+		return splitWithDelimiter(content, delimiter, keepDelimiter);
+	}
 
-			if (keepDelimiter == Config.Delimiter.START) {
-				splits.add(preSplits.getFirst());
-				IntStream.range(1, preSplits.size())
-					.filter(i -> i % 2 == 1)
-					.forEach(i -> splits.add(preSplits.get(i).concat(preSplits.get(i + 1))));
-			}
-			else {
-				IntStream.range(0, preSplits.size() - 1)
-					.filter(i -> i % 2 == 0)
-					.forEach(i -> splits.add(preSplits.get(i).concat(preSplits.get(i + 1))));
-				splits.add(preSplits.getLast());
-			}
+	/**
+	 * Splits the content into sentences using the delimiter.
+	 * @param content the content to split
+	 * @param delimiter the delimiter to split the content.
+	 * @param keepDelimiter whether to keep the delimiter at the start or end of the
+	 * sentence or not. {@link Config.Delimiter}
+	 * @return a list of split sentences
+	 */
+	private static List<String> splitWithDelimiter(String content, String delimiter, Config.Delimiter keepDelimiter) {
 
-			return splits.stream().filter(s -> !s.isBlank()).toList();
+		if (keepDelimiter == Config.Delimiter.NONE) {
+			return Arrays.stream(content.split(delimiter)).filter(s -> !s.isBlank()).toList();
 		}
 
-		return Arrays.stream(content.split(delimiter)).filter(s -> !s.isBlank()).toList();
+		String withDelimiter = "((?<=%1$s)|(?=%1$s))";
+		List<String> preSplits = new ArrayList<>(List.of(content.split(String.format(withDelimiter, delimiter))));
+
+		return keepDelimiter == Config.Delimiter.START ? splitWithDelimiterStart(preSplits)
+				: splitWithDelimiterEnd(preSplits);
+	}
+
+	/**
+	 * Splits the content into sentences using the delimiter at the start of each
+	 * sentence. {@link Config.Delimiter#START}
+	 * @param preSplits pre-splits by the delimiter
+	 * @return the list of split sentences
+	 */
+	private static List<String> splitWithDelimiterStart(List<String> preSplits) {
+		List<String> splits = new ArrayList<>();
+
+		splits.add(preSplits.getFirst());
+		IntStream.range(1, preSplits.size())
+			.filter(i -> i % 2 == 1)
+			.forEach(i -> splits.add(preSplits.get(i).concat(preSplits.get(i + 1))));
+
+		return splits.stream().filter(s -> !s.isBlank()).toList();
+	}
+
+	/**
+	 * Splits the content into sentences using the delimiter at the end of each sentence.
+	 * {@link Config.Delimiter#END}
+	 * @param preSplits the pre-splits by the delimiter
+	 * @return the list of split sentences
+	 */
+	private static List<String> splitWithDelimiterEnd(List<String> preSplits) {
+		List<String> splits = new ArrayList<>();
+
+		IntStream.range(0, preSplits.size() - 1)
+			.filter(i -> i % 2 == 0)
+			.forEach(i -> splits.add(preSplits.get(i).concat(preSplits.get(i + 1))));
+		splits.add(preSplits.getLast());
+
+		return splits.stream().filter(s -> !s.isBlank()).toList();
 	}
 
 	/**
@@ -79,7 +118,7 @@ public class Utils {
 
 			if (currentLen + sentenceLength + (currentChunk.isEmpty() ? 0 : delimiterLen) > chunkSize) {
 				if (currentLen > chunkSize) {
-					logger.warning(String.format(LONGER_THAN_THE_SPECIFIED_, currentLen, config.getChunkSize()));
+					logger.warning(String.format(LONGER_THAN_THE_SPECIFIED, currentLen, config.getChunkSize()));
 				}
 
 				if (!currentChunk.isEmpty()) {
@@ -106,9 +145,20 @@ public class Utils {
 		return chunks;
 	}
 
+	/**
+	 * Joins the sentences into a single sentence.
+	 * @param sentences the sentences to join
+	 * @param delimiter the delimiter to join the sentences
+	 * @param trimWhitespace whether to trim the whitespace
+	 * @return the generated sentence
+	 */
 	private static String joinSentences(List<String> sentences, String delimiter, Boolean trimWhitespace) {
 		String generatedSentence = String.join(delimiter, sentences);
-		return trimWhitespace ? generatedSentence.trim() : generatedSentence;
+		if (trimWhitespace) {
+			generatedSentence = generatedSentence.trim();
+		}
+
+		return generatedSentence;
 	}
 
 }

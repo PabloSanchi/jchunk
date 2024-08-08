@@ -7,7 +7,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ConfigTest {
 
 	@Test
-	public void testDefaultConfig() {
+	void testDefaultConfig() {
 		Config config = Config.builder().build();
 
 		assertThat(config.getChunkSize()).isEqualTo(1000);
@@ -18,7 +18,7 @@ class ConfigTest {
 	}
 
 	@Test
-	public void testConfigBuilder() {
+	void testConfigBuilder() {
 		Config config = Config.builder()
 			.chunkSize(35)
 			.chunkOverlap(4)
