@@ -1,5 +1,7 @@
 package jchunk.chunker.fixed;
 
+import org.springframework.util.Assert;
+
 /**
  * Configuration for the fixed chunker
  *
@@ -70,11 +72,13 @@ public class Config {
 		private Delimiter keepDelimiter = Delimiter.NONE;
 
 		public Builder chunkSize(Integer chunkSize) {
+			Assert.isTrue(chunkSize > 0, "Chunk size must be greater than 0");
 			this.chunkSize = chunkSize;
 			return this;
 		}
 
 		public Builder chunkOverlap(Integer chunkOverlap) {
+			Assert.isTrue(chunkOverlap >= 0, "Chunk overlap must be greater than or equal to 0");
 			this.chunkOverlap = chunkOverlap;
 			return this;
 		}
@@ -95,7 +99,7 @@ public class Config {
 		}
 
 		public Config build() {
-			assert chunkSize > chunkOverlap : "Chunk size must be greater than chunk overlap";
+			Assert.isTrue(chunkSize > chunkOverlap, "Chunk size must be greater than chunk overlap");
 			return new Config(chunkSize, chunkOverlap, delimiter, trimWhitespace, keepDelimiter);
 		}
 
