@@ -10,16 +10,16 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
-public class SemanticChunkerUtilsTest {
+class SemanticChunkerUtilsTest {
 
-	private final EmbeddingModel embeddingModel;
+	final EmbeddingModel embeddingModel;
 
-	public SemanticChunkerUtilsTest() {
+	SemanticChunkerUtilsTest() {
 		this.embeddingModel = Mockito.mock(EmbeddingModel.class);
 	}
 
 	@Test
-	public void splitSentenceDefaultStrategyTest() {
+	void splitSentenceDefaultStrategyTest() {
 		List<Sentence> expectedResult = List.of(Sentence.builder().content("This is a test sentence.").build(),
 				Sentence.builder().content("How are u?").build(),
 				Sentence.builder().content("I am fine thanks\nI am a test sentence!").build(),
@@ -28,8 +28,7 @@ public class SemanticChunkerUtilsTest {
 		String content = "This is a test sentence. How are u? I am fine thanks\nI am a test sentence! sure";
 		List<Sentence> result = Utils.splitSentences(content, SentenceSplitingStrategy.DEFAULT);
 
-		assertThat(result).isNotNull();
-		assertThat(result.size()).isEqualTo(expectedResult.size());
+		assertThat(result).isNotNull().hasSize(expectedResult.size());
 
 		for (int i = 0; i < result.size(); i++) {
 			assertThat(result.get(i).getContent()).isEqualTo(expectedResult.get(i).getContent());
@@ -37,7 +36,7 @@ public class SemanticChunkerUtilsTest {
 	}
 
 	@Test
-	public void splitSentenceStrategyTest() {
+	void splitSentenceStrategyTest() {
 		List<Sentence> expectedResult = List.of(
 				Sentence.builder().content("This is a test sentence. How are u? I am fine thanks").build(),
 				Sentence.builder().content("I am a test sentence! sure").build());
@@ -45,15 +44,14 @@ public class SemanticChunkerUtilsTest {
 		String content = "This is a test sentence. How are u? I am fine thanks\nI am a test sentence! sure";
 		List<Sentence> result = Utils.splitSentences(content, SentenceSplitingStrategy.LINE_BREAK);
 
-		assertThat(result).isNotNull();
-		assertThat(result.size()).isEqualTo(expectedResult.size());
+		assertThat(result).isNotNull().hasSize(expectedResult.size());
 
 		assertThat(result.get(0).getContent()).isEqualTo(expectedResult.get(0).getContent());
 		assertThat(result.get(1).getContent()).isEqualTo(expectedResult.get(1).getContent());
 	}
 
 	@Test
-	public void splitSentenceParagraphStrategyTest() {
+	void splitSentenceParagraphStrategyTest() {
 		List<Sentence> expectedResult = List.of(Sentence.builder().index(0).content("This is a test sentence.").build(),
 				Sentence.builder().index(1).content("How are u? I am fine thanks").build(),
 				Sentence.builder().index(2).content("I am a test sentence!\nsure").build());
@@ -61,8 +59,7 @@ public class SemanticChunkerUtilsTest {
 		String content = "This is a test sentence.\n\nHow are u? I am fine thanks\n\nI am a test sentence!\nsure";
 		List<Sentence> result = Utils.splitSentences(content, SentenceSplitingStrategy.PARAGRAPH);
 
-		assertThat(result).isNotNull();
-		assertThat(result.size()).isEqualTo(expectedResult.size());
+		assertThat(result).isNotNull().hasSize(expectedResult.size());
 
 		assertThat(result.get(0).getContent()).isEqualTo(expectedResult.get(0).getContent());
 		assertThat(result.get(1).getContent()).isEqualTo(expectedResult.get(1).getContent());
@@ -70,7 +67,7 @@ public class SemanticChunkerUtilsTest {
 	}
 
 	@Test
-	public void combineSentencesSuccessTest() {
+	void combineSentencesSuccessTest() {
 		Integer bufferSize = 2;
 		List<Sentence> input = List.of(Sentence.builder().index(0).content("This").build(),
 				Sentence.builder().index(1).content("is").build(), Sentence.builder().index(2).content("a").build(),
@@ -100,7 +97,7 @@ public class SemanticChunkerUtilsTest {
 	}
 
 	@Test
-	public void combineSentencesWithBufferSizeEqualZeroTest() {
+	void combineSentencesWithBufferSizeEqualZeroTest() {
 		Integer bufferSize = 0;
 		List<Sentence> input = List.of(Sentence.builder().content("This").build());
 
@@ -109,7 +106,7 @@ public class SemanticChunkerUtilsTest {
 	}
 
 	@Test
-	public void combineSentencesWithBufferSizeIsNullTest() {
+	void combineSentencesWithBufferSizeIsNullTest() {
 		Integer bufferSize = null;
 		List<Sentence> input = List.of(Sentence.builder().content("This").build());
 
@@ -118,7 +115,7 @@ public class SemanticChunkerUtilsTest {
 	}
 
 	@Test
-	public void combineSentencesWithBufferSizeGreaterThanInputLengthTest() {
+	void combineSentencesWithBufferSizeGreaterThanInputLengthTest() {
 		Integer bufferSize = 1;
 		List<Sentence> input = List.of(Sentence.builder().content("This").build());
 
@@ -127,7 +124,7 @@ public class SemanticChunkerUtilsTest {
 	}
 
 	@Test
-	public void combineSentencesWithInputIsNullTest() {
+	void combineSentencesWithInputIsNullTest() {
 		Integer bufferSize = 2;
 		List<Sentence> input = null;
 
@@ -136,7 +133,7 @@ public class SemanticChunkerUtilsTest {
 	}
 
 	@Test
-	public void combineSentencesWithInputIsEmptyTest() {
+	void combineSentencesWithInputIsEmptyTest() {
 		Integer bufferSize = 2;
 		List<Sentence> input = List.of();
 
@@ -145,7 +142,7 @@ public class SemanticChunkerUtilsTest {
 	}
 
 	@Test
-	public void embedSentencesTest() {
+	void embedSentencesTest() {
 		Mockito.when(embeddingModel.embed(Mockito.anyList()))
 			.thenReturn(List.of(List.of(1.0, 2.0, 3.0), List.of(4.0, 5.0, 6.0)));
 
@@ -168,7 +165,7 @@ public class SemanticChunkerUtilsTest {
 	}
 
 	@Test
-	public void testIdenticalVectors() {
+	void testIdenticalVectors() {
 		List<Double> embedding1 = List.of(1.0, 2.0, 3.0);
 		List<Double> embedding2 = List.of(1.0, 2.0, 3.0);
 
@@ -178,7 +175,7 @@ public class SemanticChunkerUtilsTest {
 	}
 
 	@Test
-	public void testOrthogonalVectors() {
+	void testOrthogonalVectors() {
 		List<Double> embedding1 = List.of(1.0, 0.0, 0.0);
 		List<Double> embedding2 = List.of(0.0, 1.0, 0.0);
 
@@ -188,7 +185,7 @@ public class SemanticChunkerUtilsTest {
 	}
 
 	@Test
-	public void testOppositeVectors() {
+	void testOppositeVectors() {
 		List<Double> embedding1 = List.of(1.0, 2.0, 3.0);
 		List<Double> embedding2 = List.of(-1.0, -2.0, -3.0);
 
@@ -198,7 +195,7 @@ public class SemanticChunkerUtilsTest {
 	}
 
 	@Test
-	public void testDifferentMagnitudeVectors() {
+	void testDifferentMagnitudeVectors() {
 		List<Double> embedding1 = List.of(1.0, 2.0, 3.0);
 		List<Double> embedding2 = List.of(2.0, 4.0, 6.0);
 
@@ -208,7 +205,7 @@ public class SemanticChunkerUtilsTest {
 	}
 
 	@Test
-	public void testZeroVectors() {
+	void testZeroVectors() {
 		List<Double> embedding1 = List.of(0.0, 0.0, 0.0);
 		List<Double> embedding2 = List.of(0.0, 0.0, 0.0);
 
@@ -218,7 +215,7 @@ public class SemanticChunkerUtilsTest {
 	}
 
 	@Test
-	public void testGetIndicesAboveThreshold() {
+	void testGetIndicesAboveThreshold() {
 		Integer percentile = 95;
 		List<Double> distances = List.of(10.0, 15.0, 20.0, 25.0, 30.0, 35.0, 40.0, 45.0, 50.0, 55.0, 60.0, 65.0, 70.0,
 				75.0);
@@ -231,7 +228,7 @@ public class SemanticChunkerUtilsTest {
 	}
 
 	@Test
-	public void testGenerateChunks() {
+	void testGenerateChunks() {
 		List<Sentence> sentences = List.of(Sentence.builder().index(0).content("This").build(),
 				Sentence.builder().index(1).content("is").build(), Sentence.builder().index(2).content("a").build(),
 				Sentence.builder().index(3).content("test.").build(), Sentence.builder().index(4).content("We").build(),
@@ -247,8 +244,7 @@ public class SemanticChunkerUtilsTest {
 
 		List<Chunk> actualChunks = Utils.generateChunks(sentences, breakPoints);
 
-		assertThat(actualChunks).isNotNull();
-		assertThat(actualChunks.size()).isEqualTo(expectedChunks.size());
+		assertThat(actualChunks).isNotNull().hasSize(expectedChunks.size());
 
 		for (int i = 0; i < actualChunks.size(); i++) {
 			assertThat(actualChunks.get(i).id()).isEqualTo(expectedChunks.get(i).id());
