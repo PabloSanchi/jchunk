@@ -37,15 +37,13 @@ class ConfigTest {
 
 	@Test
 	void testConfigThrowErrorWhenChunkSizeIsNegative() {
-		assertThatThrownBy(() -> Config.builder().chunkSize(-1).build())
-			.isInstanceOf(IllegalArgumentException.class)
+		assertThatThrownBy(() -> Config.builder().chunkSize(-1).build()).isInstanceOf(IllegalArgumentException.class)
 			.hasMessage("Chunk size must be greater than 0");
 	}
 
 	@Test
 	void testConfigThrowErrorWhenChunkOverlapIsNegative() {
-		assertThatThrownBy(() -> Config.builder().chunkOverlap(-1).build())
-			.isInstanceOf(IllegalArgumentException.class)
+		assertThatThrownBy(() -> Config.builder().chunkOverlap(-1).build()).isInstanceOf(IllegalArgumentException.class)
 			.hasMessage("Chunk overlap must be greater than or equal to 0");
 	}
 
