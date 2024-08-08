@@ -6,7 +6,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class UtilsTest {
+class UtilsTest {
 
 	private static final String CONTENT = "This is the text I would like to chunk up. It is the example text for this exercise";
 

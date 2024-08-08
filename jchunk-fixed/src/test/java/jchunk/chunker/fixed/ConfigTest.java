@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ConfigTest {
+class ConfigTest {
 
 	@Test
 	public void testDefaultConfig() {
@@ -29,7 +29,7 @@ public class ConfigTest {
 
 		assertThat(config.getChunkSize()).isEqualTo(35);
 		assertThat(config.getChunkOverlap()).isEqualTo(4);
-		assertThat(config.getDelimiter()).isEqualTo("");
+		assertThat(config.getDelimiter()).isBlank();
 		assertThat(config.getTrimWhitespace()).isFalse();
 		assertThat(config.getKeepDelimiter()).isEqualTo(Config.Delimiter.START);
 	}

@@ -7,7 +7,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class FixedChunkerIT {
+class FixedChunkerIT {
 
 	private FixedChunker chunker;
 
