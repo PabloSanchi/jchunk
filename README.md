@@ -1,4 +1,5 @@
 # JChunk
+## A Spring Boot Library for Text Chunking
 
 JChunk project is simple library that enables different types of text splitting strategies.
 This project begun thanks to Greg Kamradt's post [text splitting ideas](https://github.com/FullStackRetrieval-com/RetrievalTutorials/blob/main/tutorials/LevelsOfTextSplitting/5_Levels_Of_Text_Splitting.ipynb)
@@ -10,7 +11,7 @@ For now there is only [Pablo Sanchidrian](https://github.com/PabloSanchi) develo
 Feel free to contribute!!
 
 ## ROAD MAP
-- [x] Fixed Character Chunker (DEVELOPMENT)
+- [x] Fixed Character Chunker (PRE-RELEASE)
 - [ ] Recursive Character Text Chunker (NOT STARTED)
 - [ ] Document Specific Chunker (NOT STARTED)
 - [x] Semantic Chunker (PRE-RELEASE)
