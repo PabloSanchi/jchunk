@@ -30,9 +30,7 @@ public class Config {
 		return separators;
 	}
 
-	public Config(Integer chunkSize, Integer chunkOverlap, List<String> separators) {
-		assert chunkOverlap < chunkSize;
-
+	private Config(Integer chunkSize, Integer chunkOverlap, List<String> separators) {
 		this.chunkSize = chunkSize;
 		this.chunkOverlap = chunkOverlap;
 		this.separators = separators;
