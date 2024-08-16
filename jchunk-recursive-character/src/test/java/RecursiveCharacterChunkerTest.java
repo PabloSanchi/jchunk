@@ -6,7 +6,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class RecursiveCharacterChunkerTest {
+class RecursiveCharacterChunkerTest {
 
 	RecursiveCharacterChunker chunker = new RecursiveCharacterChunker();
 
@@ -19,7 +19,7 @@ public class RecursiveCharacterChunkerTest {
 			""";
 
 	@Test
-	public void testSplit() {
+	void testSplit() {
 		List<Chunk> expectedChunks = List.of(
 				new Chunk(0, "One of the most important things I didn't understand about the"),
 				new Chunk(1, "world when I was a child is the degree to which the returns for"),
@@ -39,8 +39,7 @@ public class RecursiveCharacterChunkerTest {
 
 		List<Chunk> chunks = chunker.split(content);
 
-		assertThat(chunks).isNotNull();
-		assertThat(chunks).hasSize(expectedChunks.size());
+		assertThat(chunks).isNotNull().hasSize(expectedChunks.size());
 
 		for (int i = 0; i < chunks.size(); i++) {
 			assertThat(chunks.get(i).id()).isEqualTo(expectedChunks.get(i).id());
