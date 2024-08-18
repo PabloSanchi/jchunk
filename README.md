@@ -1,4 +1,5 @@
 # JChunk
+## A Spring Boot Library for Text Chunking
 
 JChunk project is simple library that enables different types of text splitting strategies.
 This project begun thanks to Greg Kamradt's post [text splitting ideas](https://github.com/FullStackRetrieval-com/RetrievalTutorials/blob/main/tutorials/LevelsOfTextSplitting/5_Levels_Of_Text_Splitting.ipynb)
@@ -10,14 +11,76 @@ For now there is only [Pablo Sanchidrian](https://github.com/PabloSanchi) develo
 Feel free to contribute!!
 
 ## ROAD MAP
-- [ ] Character Chunker (NOT STARTED)
+- [x] Fixed Character Chunker (PRE-RELEASE)
 - [ ] Recursive Character Text Chunker (NOT STARTED)
 - [ ] Document Specific Chunker (NOT STARTED)
 - [x] Semantic Chunker (PRE-RELEASE)
 - [ ] Agentic Chunker (NOT STARTED)
 
+## Building
 
-## Character Chunker
+To build with running unit tests
+
+```sh
+./mvnw clean package
+```
+
+To reformat using the java-format plugin
+
+```sh
+./mvnw spring-javaformat:apply
+```
+
+To update the year on license headers using the license-maven-plugin
+
+```sh
+./mvnw license:update-file-header -Plicense
+```
+
+To check javadocs using the javadoc:javadoc
+
+```sh
+./mvnw javadoc:javadoc -Pjavadoc
+```
+
+## Fixed Character Chunker
+Character splitting is a basic text processing technique where text is divided into fixed-size chunks of characters. While it's not suitable for most advanced text processing tasks due to its simplicity and rigidity, it serves as an excellent starting point to understand the fundamentals of text splitting. See the following aspects of this chunker including its advantages, disadvantages, and key concepts like chunk size, chunk overlap, and separators.
+
+### 1. Chunk Size 
+The chunk size is the number of characters each chunk will contain. For example, if you set a chunk size of 50, each chunk will consist of 50 characters.
+
+**Example:**
+- Input Text: "This is an example of character splitting."
+- Chunk Size: 10
+- Output Chunks: `["This is an", " example o", "f characte", "r splitti", "ng."]`
+
+### 2. Chunk Overlap
+Chunk overlap refers to the number of characters that will overlap between consecutive chunks. This helps in maintaining context across chunks by ensuring that a portion of the text at the end of one chunk is repeated at the beginning of the next chunk.
+
+**Example:**
+- Input Text: "This is an example of character splitting."
+- Chunk Size: 10
+- Chunk Overlap: 4
+- Output Chunks: `["This is an", " an examp", "mple of ch", "aracter sp", " splitting."]`
+
+### 3. Separators
+Separators are specific character sequences used to split the text. For instance, you might want to split your text at every comma or period.
+
+**Example:**
+- Input Text: "This is an example. Let's split on periods. Okay?"
+- Separator: ". "
+- Output Chunks: ["This is an example", "Let's split on periods", "Okay?"]
+
+
+### Pros and Cons
+
+**Pros**
+- Easy & Simple: Character splitting is straightforward to implement and understand.
+- Basic Segmentation: It provides a basic way to segment text into smaller pieces.
+
+**Cons**
+- Rigid: Does not consider the structure or context of the text.
+- Duplicate Data: Chunk overlap creates duplicate data, which might not be efficient.
 
 ## Recursive Character Text Chunker
 
@@ -116,32 +179,6 @@ Split the text into chunks at the identified breakpoints.
 
 
 ## Agentic Chunker
-
-## Building
-
-To build with running unit tests
-
-```sh
-./mvnw clean package
-```
-
-To reformat using the java-format plugin
-
-```sh
-./mvnw spring-javaformat:apply
-```
-
-To update the year on license headers using the license-maven-plugin
-
-```sh
-./mvnw license:update-file-header -Plicense
-```
-
-To check javadocs using the javadoc:javadoc
-
-```sh
-./mvnw javadoc:javadoc -Pjavadoc
-```
 
 ## Contributing
 

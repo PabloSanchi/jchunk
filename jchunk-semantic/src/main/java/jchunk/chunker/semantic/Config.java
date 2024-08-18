@@ -21,6 +21,10 @@ public class Config {
 		return percentile;
 	}
 
+	public Integer getBufferSize() {
+		return bufferSize;
+	}
+
 	public Config(SentenceSplitingStrategy sentenceSplitingStrategy, Integer percentile, Integer bufferSize) {
 		this.sentenceSplitingStrategy = sentenceSplitingStrategy;
 		this.percentile = percentile;

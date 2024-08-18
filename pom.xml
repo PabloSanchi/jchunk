@@ -15,8 +15,9 @@
 
 	<modules>
 		<module>jchunk-core</module>
-		<module>jchunk-semantic</module>
+		<module>jchunk-fixed</module>
 		<module>jchunk-recursive-character</module>
+		<module>jchunk-semantic</module>
 	</modules>
 
 	<scm>

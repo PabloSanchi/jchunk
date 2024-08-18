@@ -1,6 +1,7 @@
 package jchunk.chunker.semantic;
 
 import jchunk.chunker.core.chunk.Chunk;
+import org.nd4j.common.io.Assert;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 import org.springframework.ai.embedding.EmbeddingModel;
@@ -20,6 +21,12 @@ import java.util.stream.IntStream;
 public class Utils {
 
 	/**
+	 * Private constructor to hide the implicit public one
+	 */
+	private Utils() {
+	}
+
+	/**
 	 * Split the content into sentences
 	 * @param content the content to split
 	 * @return the list of sentences
@@ -28,7 +35,7 @@ public class Utils {
 		AtomicInteger index = new AtomicInteger(0);
 		return Arrays.stream(content.split(splitingStrategy.getStrategy()))
 			.map(sentence -> Sentence.builder().content(sentence).index(index.getAndIncrement()).build())
-			.collect(Collectors.toList());
+			.toList();
 	}
 
 	/**
@@ -94,7 +101,7 @@ public class Utils {
 			Sentence sentence = sentences.get(i);
 			sentence.setEmbedding(embeddings.get(i));
 			return sentence;
-		}).collect(Collectors.toList());
+		}).toList();
 	}
 
 	/**
@@ -127,7 +134,7 @@ public class Utils {
 			Sentence sentence1 = sentences.get(i);
 			Sentence sentence2 = sentences.get(i + 1);
 			return cosineSimilarity(sentence1.getEmbedding(), sentence2.getEmbedding());
-		}).collect(Collectors.toList());
+		}).toList();
 	}
 
 	/**
@@ -136,7 +143,7 @@ public class Utils {
 	 * @return the list of break points indices
 	 */
 	public static List<Integer> calculateBreakPoints(List<Double> distances, Integer percentile) {
-		assert distances != null : "The list of distances cannot be null";
+		Assert.isTrue(distances != null, "The list of distances cannot be null");
 
 		double breakpointDistanceThreshold = calculatePercentile(distances, percentile);
 
@@ -147,8 +154,8 @@ public class Utils {
 	}
 
 	private static Double calculatePercentile(List<Double> distances, int percentile) {
-		assert distances != null : "The list of distances cannot be null";
-		assert percentile > 0 && percentile < 100 : "The percentile must be between 0 and 100";
+		Assert.isTrue(distances != null, "The list of distances cannot be null");
+		Assert.isTrue(percentile > 0 && percentile < 100, "The percentile must be between 0 and 100");
 
 		distances = distances.stream().sorted().toList();
 
@@ -163,9 +170,9 @@ public class Utils {
 	 * @return the list of chunks
 	 */
 	public static List<Chunk> generateChunks(List<Sentence> sentences, List<Integer> breakPoints) {
-		assert sentences != null : "The list of sentences cannot be null";
-		assert !sentences.isEmpty() : "The list of sentences cannot be empty";
-		assert breakPoints != null : "The list of break points cannot be null";
+		Assert.isTrue(sentences != null, "The list of sentences cannot be null");
+		Assert.isTrue(!sentences.isEmpty(), "The list of sentences cannot be empty");
+		Assert.isTrue(breakPoints != null, "The list of break points cannot be null");
 
 		AtomicInteger index = new AtomicInteger(0);
 
@@ -177,7 +184,7 @@ public class Utils {
 				.map(Sentence::getContent)
 				.collect(Collectors.joining(" "));
 			return new Chunk(index.getAndIncrement(), content);
-		}).collect(Collectors.toList());
+		}).toList();
 	}
 
 }

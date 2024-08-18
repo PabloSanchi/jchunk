@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.github.PabloSanchi</groupId>
+        <artifactId>jchunk</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>jchunk-fixed</artifactId>
+    <packaging>jar</packaging>
+    <name>JChunk - Fixed Chunker</name>
+    <description>Fixed Chunker for Java</description>
+    <url>https://github.com/PabloSanchi/jchunk</url>
+
+    <scm>
+        <url>https://github.com/PabloSanchi/jchunk</url>
+        <connection>git://github.com/PabloSanchi/jchunk.git</connection>
+        <developerConnection>git@github.com:PabloSanchi/jchunk.git</developerConnection>
+    </scm>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.github.PabloSanchi</groupId>
+            <artifactId>jchunk-core</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot</artifactId>
+        </dependency>
+
+        <!-- test -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+        </dependency>
+    </dependencies>
+
+</project>
