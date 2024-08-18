@@ -2,9 +2,7 @@ package jchunk.chunker.recursive;
 
 import jchunk.chunker.core.chunk.Chunk;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
@@ -173,47 +171,70 @@ public class Utils {
 	 * @param sentences the sentences to merge
 	 * @return list of chunks
 	 */
-	static List<Chunk> mergeSentences(List<String> sentences, String delimiter, Integer chunkSize, Integer chunkOverlap,
-			Boolean trimWhitespace, AtomicInteger index) {
+	static List<Chunk> mergeSentences(List<String> sentences, String delimiter, int chunkSize, int chunkOverlap,
+			boolean trimWhitespace, AtomicInteger index) {
 
 		int currentLen = 0;
 		int delimiterLen = delimiter.length();
 
 		List<Chunk> chunks = new ArrayList<>();
-		List<String> currentChunk = new ArrayList<>();
+		Deque<String> currentChunk = new LinkedList<>();
 
 		for (String sentence : sentences) {
 			int sentenceLength = sentence.length();
 
 			if (currentLen + sentenceLength + (currentChunk.isEmpty() ? 0 : delimiterLen) > chunkSize) {
+
 				if (currentLen > chunkSize) {
 					logger.warning(String.format(LONGER_THAN_THE_SPECIFIED, currentLen, chunkSize));
 				}
 
 				if (!currentChunk.isEmpty()) {
-					String generatedSentence = joinSentences(currentChunk, delimiter, trimWhitespace);
-					Chunk chunk = Chunk.builder().id(index.getAndIncrement()).content(generatedSentence).build();
-					chunks.add(chunk);
-
-					while (currentLen > chunkOverlap
-							|| (currentLen + sentenceLength + (currentChunk.isEmpty() ? 0 : delimiterLen) > chunkSize
-									&& currentLen > 0)) {
-						currentLen -= currentChunk.removeFirst().length() + (currentChunk.isEmpty() ? 0 : delimiterLen);
-					}
+					addChunk(chunks, currentChunk, delimiter, trimWhitespace, index);
+					currentLen = adjustCurrentChunkForOverlap(currentChunk, currentLen, chunkOverlap, delimiterLen);
 				}
 			}
 
-			currentChunk.add(sentence);
+			currentChunk.addLast(sentence);
 			currentLen += sentenceLength + (currentChunk.size() > 1 ? delimiterLen : 0);
 		}
 
 		if (!currentChunk.isEmpty()) {
-			String generatedSentence = joinSentences(currentChunk, delimiter, trimWhitespace);
-			Chunk chunk = Chunk.builder().id(index.getAndIncrement()).content(generatedSentence).build();
-			chunks.add(chunk);
+			addChunk(chunks, currentChunk, delimiter, trimWhitespace, index);
 		}
 
 		return chunks;
+	}
+
+	/**
+	 * Adds the chunk to the list of chunks.
+	 * @param chunks the list of chunks
+	 * @param currentChunk the current chunk
+	 * @param delimiter the delimiter
+	 * @param trimWhitespace whether to trim the whitespace
+	 * @param index the index of the chunk
+	 */
+	private static void addChunk(List<Chunk> chunks, Deque<String> currentChunk, String delimiter,
+			boolean trimWhitespace, AtomicInteger index) {
+		String generatedSentence = joinSentences(new ArrayList<>(currentChunk), delimiter, trimWhitespace);
+		Chunk chunk = Chunk.builder().id(index.getAndIncrement()).content(generatedSentence).build();
+		chunks.add(chunk);
+	}
+
+	/**
+	 * Adjusts the current chunk for overlap.
+	 * @param currentChunk the current chunk
+	 * @param currentLen the current length of the chunk
+	 * @param chunkOverlap the overlap between chunks
+	 * @param delimiterLen the length of the delimiter
+	 * @return the adjusted length of the chunk
+	 */
+	private static int adjustCurrentChunkForOverlap(Deque<String> currentChunk, int currentLen, int chunkOverlap,
+			int delimiterLen) {
+		while (currentLen > chunkOverlap && !currentChunk.isEmpty()) {
+			currentLen -= currentChunk.removeFirst().length() + (currentChunk.isEmpty() ? 0 : delimiterLen);
+		}
+		return currentLen;
 	}
 
 	/**
