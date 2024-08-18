@@ -65,7 +65,11 @@ public class Utils {
 				}
 
 				if (newDelimiters.isEmpty()) {
-					chunks.add(new Chunk(index.getAndIncrement(), trimWhitespace ? split.trim() : split));
+					Chunk chunk = Chunk.builder()
+							.id(index.getAndIncrement())
+							.content(trimWhitespace ? split.trim() : split)
+							.build();
+					chunks.add(chunk);
 				}
 				else {
 					List<Chunk> generatedChunks = splitContent(split, chunkSize, chunkOverlap, keepDelimiter,
@@ -188,7 +192,11 @@ public class Utils {
 
 				if (!currentChunk.isEmpty()) {
 					String generatedSentence = joinSentences(currentChunk, delimiter, trimWhitespace);
-					chunks.add(new Chunk(index.getAndIncrement(), generatedSentence));
+					Chunk chunk = Chunk.builder()
+							.id(index.getAndIncrement())
+							.content(generatedSentence)
+							.build();
+					chunks.add(chunk);
 
 					while (currentLen > chunkOverlap
 							|| (currentLen + sentenceLength + (currentChunk.isEmpty() ? 0 : delimiterLen) > chunkSize
@@ -204,7 +212,11 @@ public class Utils {
 
 		if (!currentChunk.isEmpty()) {
 			String generatedSentence = joinSentences(currentChunk, delimiter, trimWhitespace);
-			chunks.add(new Chunk(index.getAndIncrement(), generatedSentence));
+			Chunk chunk = Chunk.builder()
+					.id(index.getAndIncrement())
+					.content(generatedSentence)
+					.build();
+			chunks.add(chunk);
 		}
 
 		return chunks;
