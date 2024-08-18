@@ -4,17 +4,17 @@
 JChunk project is simple library that enables different types of text splitting strategies.
 This project begun thanks to Greg Kamradt's post [text splitting ideas](https://github.com/FullStackRetrieval-com/RetrievalTutorials/blob/main/tutorials/LevelsOfTextSplitting/5_Levels_Of_Text_Splitting.ipynb)
 
-## ⚠️ WARNING - STILL IN DEVELOPMENT ⚠️
+## ⚠️ WARNING - EARLY PHASE ⚠️
 
 For now there is only [Pablo Sanchidrian](https://github.com/PabloSanchi) developing this project (in free time) so it might take a while to get to a first stable version.
 
 Feel free to contribute!!
 
 ## ROAD MAP
-- [x] Fixed Character Chunker (PRE-RELEASE)
-- [ ] Recursive Character Text Chunker (NOT STARTED)
+- [x] Fixed Character Chunker (DONE)
+- [X] Recursive Character Text Chunker (DONE)
 - [ ] Document Specific Chunker (NOT STARTED)
-- [x] Semantic Chunker (PRE-RELEASE)
+- [x] Semantic Chunker (DONE)
 - [ ] Agentic Chunker (NOT STARTED)
 
 ## Building
