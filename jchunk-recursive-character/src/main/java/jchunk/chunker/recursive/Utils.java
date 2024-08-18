@@ -7,7 +7,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.IntStream;
 
@@ -33,7 +32,8 @@ public class Utils {
 	 * @param content the content to split
 	 * @param chunkSize the size of the chunk
 	 * @param chunkOverlap the overlap between chunks
-	 * @param keepDelimiter whether to keep the delimiter at the start or end of the sentence or not. {@link Config.Delimiter}
+	 * @param keepDelimiter whether to keep the delimiter at the start or end of the
+	 * sentence or not. {@link Config.Delimiter}
 	 * @param delimiters the list of delimiters to split the content
 	 * @param trimWhitespace whether to trim the whitespace
 	 * @param index the index of the chunk
@@ -89,10 +89,11 @@ public class Utils {
 	 * given config
 	 * @param content the content to split
 	 * @param delimiters the list of delimiters to check
-	 * @return the best matching delimiter and modifies the reference value of the given list
+	 * @return the best matching delimiter and modifies the reference value of the given
+	 * list
 	 */
 	private static String getBestMatchingDelimiter(String content, List<String> delimiters) {
-		for (Iterator<String> iterator = delimiters.iterator(); iterator.hasNext(); ) {
+		for (Iterator<String> iterator = delimiters.iterator(); iterator.hasNext();) {
 			String delimiter = iterator.next();
 
 			if (delimiter.isEmpty()) {
