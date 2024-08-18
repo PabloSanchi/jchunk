@@ -3,6 +3,7 @@ package jchunk.chunker.recursive;
 import jchunk.chunker.core.chunk.Chunk;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
@@ -28,6 +29,15 @@ public class Utils {
 	}
 
 	/**
+	 * Splits the content into chunks.
+	 * @param content the content to split
+	 * @param chunkSize the size of the chunk
+	 * @param chunkOverlap the overlap between chunks
+	 * @param keepDelimiter whether to keep the delimiter at the start or end of the sentence or not. {@link Config.Delimiter}
+	 * @param delimiters the list of delimiters to split the content
+	 * @param trimWhitespace whether to trim the whitespace
+	 * @param index the index of the chunk
+	 * @return the list of chunks {@link Chunk}
 	 */
 	public static List<Chunk> splitContent(String content, Integer chunkSize, Integer chunkOverlap,
 			Config.Delimiter keepDelimiter, List<String> delimiters, Boolean trimWhitespace, AtomicInteger index) {
@@ -55,7 +65,7 @@ public class Utils {
 				}
 
 				if (newDelimiters.isEmpty()) {
-					chunks.add(new Chunk(index.getAndIncrement(), split));
+					chunks.add(new Chunk(index.getAndIncrement(), trimWhitespace ? split.trim() : split));
 				}
 				else {
 					List<Chunk> generatedChunks = splitContent(split, chunkSize, chunkOverlap, keepDelimiter,
@@ -79,27 +89,24 @@ public class Utils {
 	 * given config
 	 * @param content the content to split
 	 * @param delimiters the list of delimiters to check
-	 * @return the best matching delimiter
+	 * @return the best matching delimiter and modifies the reference value of the given list
 	 */
 	private static String getBestMatchingDelimiter(String content, List<String> delimiters) {
-		String delimiterToUse = delimiters.getLast();
+		for (Iterator<String> iterator = delimiters.iterator(); iterator.hasNext(); ) {
+			String delimiter = iterator.next();
 
-		for (String delimiter : new ArrayList<>(delimiters)) {
 			if (delimiter.isEmpty()) {
 				delimiters.clear();
 				return delimiter;
 			}
 
-			Matcher matcher = Pattern.compile(delimiter).matcher(content);
-			if (matcher.find()) {
-				delimiters.removeFirst();
+			if (Pattern.compile(delimiter).matcher(content).find()) {
+				iterator.remove();
 				return delimiter;
 			}
-
-			delimiters.removeFirst();
 		}
 
-		return delimiterToUse;
+		return "";
 	}
 
 	/**
