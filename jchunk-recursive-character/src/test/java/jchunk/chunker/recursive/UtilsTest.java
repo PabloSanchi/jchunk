@@ -1,8 +1,6 @@
 package jchunk.chunker.recursive;
 
 import jchunk.chunker.core.chunk.Chunk;
-import jchunk.chunker.recursive.Config;
-import jchunk.chunker.recursive.Utils;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
