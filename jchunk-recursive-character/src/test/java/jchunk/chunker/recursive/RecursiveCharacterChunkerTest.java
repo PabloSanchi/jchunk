@@ -44,7 +44,7 @@ class RecursiveCharacterChunkerTest {
 		assertThat(chunks).isNotNull().hasSize(expectedChunks.size());
 
 		for (int i = 0; i < chunks.size(); i++) {
-			// assertThat(chunks.get(i).id()).isEqualTo(expectedChunks.get(i).id());
+			assertThat(chunks.get(i).id()).isEqualTo(expectedChunks.get(i).id());
 			assertThat(chunks.get(i).content()).isEqualTo(expectedChunks.get(i).content());
 		}
 	}

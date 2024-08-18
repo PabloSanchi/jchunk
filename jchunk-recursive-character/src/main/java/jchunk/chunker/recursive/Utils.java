@@ -30,7 +30,7 @@ public class Utils {
 	/**
 	 */
 	public static List<Chunk> splitContent(String content, Integer chunkSize, Integer chunkOverlap,
-			Config.Delimiter keepDelimiter, List<String> delimiters, Boolean trimWhitespace) {
+			Config.Delimiter keepDelimiter, List<String> delimiters, Boolean trimWhitespace, AtomicInteger index) {
 
 		List<String> newDelimiters = new ArrayList<>(delimiters);
 		String delimiter = getBestMatchingDelimiter(content, newDelimiters);
@@ -49,17 +49,17 @@ public class Utils {
 			else {
 				if (!goodSplits.isEmpty()) {
 					List<Chunk> generatedChunks = mergeSentences(goodSplits, delimiterToUse, chunkSize, chunkOverlap,
-							trimWhitespace);
+							trimWhitespace, index);
 					chunks.addAll(generatedChunks);
 					goodSplits.clear();
 				}
 
 				if (newDelimiters.isEmpty()) {
-					chunks.add(new Chunk(0, split));
+					chunks.add(new Chunk(index.getAndIncrement(), split));
 				}
 				else {
 					List<Chunk> generatedChunks = splitContent(split, chunkSize, chunkOverlap, keepDelimiter,
-							newDelimiters, trimWhitespace);
+							newDelimiters, trimWhitespace, index);
 					chunks.addAll(generatedChunks);
 				}
 			}
@@ -67,7 +67,7 @@ public class Utils {
 
 		if (!goodSplits.isEmpty()) {
 			List<Chunk> generatedChunks = mergeSentences(goodSplits, delimiterToUse, chunkSize, chunkOverlap,
-					trimWhitespace);
+					trimWhitespace, index);
 			chunks.addAll(generatedChunks);
 		}
 
@@ -162,15 +162,13 @@ public class Utils {
 	 * @return list of chunks
 	 */
 	static List<Chunk> mergeSentences(List<String> sentences, String delimiter, Integer chunkSize, Integer chunkOverlap,
-			Boolean trimWhitespace) {
+			Boolean trimWhitespace, AtomicInteger index) {
 
 		int currentLen = 0;
 		int delimiterLen = delimiter.length();
 
 		List<Chunk> chunks = new ArrayList<>();
 		List<String> currentChunk = new ArrayList<>();
-
-		AtomicInteger chunkIndex = new AtomicInteger(0);
 
 		for (String sentence : sentences) {
 			int sentenceLength = sentence.length();
@@ -182,7 +180,7 @@ public class Utils {
 
 				if (!currentChunk.isEmpty()) {
 					String generatedSentence = joinSentences(currentChunk, delimiter, trimWhitespace);
-					chunks.add(new Chunk(chunkIndex.getAndIncrement(), generatedSentence));
+					chunks.add(new Chunk(index.getAndIncrement(), generatedSentence));
 
 					while (currentLen > chunkOverlap
 							|| (currentLen + sentenceLength + (currentChunk.isEmpty() ? 0 : delimiterLen) > chunkSize
@@ -198,7 +196,7 @@ public class Utils {
 
 		if (!currentChunk.isEmpty()) {
 			String generatedSentence = joinSentences(currentChunk, delimiter, trimWhitespace);
-			chunks.add(new Chunk(chunkIndex.getAndIncrement(), generatedSentence));
+			chunks.add(new Chunk(index.getAndIncrement(), generatedSentence));
 		}
 
 		return chunks;

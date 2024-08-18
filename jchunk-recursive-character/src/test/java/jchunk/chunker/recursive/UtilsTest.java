@@ -6,6 +6,7 @@ import jchunk.chunker.recursive.Utils;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 class UtilsTest {
 
@@ -23,7 +24,7 @@ class UtilsTest {
 		Config config = Config.builder().chunkSize(15).build();
 
 		List<Chunk> sentences = Utils.splitContent(content, config.getChunkSize(), config.getChunkOverlap(),
-				config.getKeepDelimiter(), config.getDelimiters(), config.getTrimWhitespace());
+				config.getKeepDelimiter(), config.getDelimiters(), config.getTrimWhitespace(), new AtomicInteger(0));
 	}
 
 }
