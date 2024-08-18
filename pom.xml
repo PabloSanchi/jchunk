@@ -14,9 +14,10 @@
 	<description>Enable text chunkers for RAGs in Java</description>
 
 	<modules>
-		<module>jchunk-semantic</module>
 		<module>jchunk-core</module>
 		<module>jchunk-fixed</module>
+		<module>jchunk-recursive-character</module>
+		<module>jchunk-semantic</module>
 	</modules>
 
 	<scm>

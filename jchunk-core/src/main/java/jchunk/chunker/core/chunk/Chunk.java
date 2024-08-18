@@ -10,4 +10,30 @@ package jchunk.chunker.core.chunk;
  * @author Pablo Sanchidrian Herrera
  */
 public record Chunk(Integer id, String content) {
+
+	public static Builder builder() {
+		return new Builder();
+	}
+
+	public static class Builder {
+
+		private Integer id;
+
+		private String content;
+
+		public Builder id(Integer id) {
+			this.id = id;
+			return this;
+		}
+
+		public Builder content(String content) {
+			this.content = content;
+			return this;
+		}
+
+		public Chunk build() {
+			return new Chunk(id, content);
+		}
+
+	}
 }
