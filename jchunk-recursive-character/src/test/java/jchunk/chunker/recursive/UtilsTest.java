@@ -19,7 +19,7 @@ class UtilsTest {
 
 	@Test
 	void splitText() {
-		Config config = Config.builder().chunkSize(15).build();
+		Config config = Config.builder().chunkSize(15).chunkOverlap(0).build();
 
 		List<Chunk> sentences = Utils.splitContent(content, config.getChunkSize(), config.getChunkOverlap(),
 				config.getKeepDelimiter(), config.getDelimiters(), config.getTrimWhitespace(), new AtomicInteger(0));
