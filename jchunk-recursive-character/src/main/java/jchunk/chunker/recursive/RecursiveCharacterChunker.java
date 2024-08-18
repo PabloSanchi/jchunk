@@ -5,6 +5,12 @@ import jchunk.chunker.core.chunk.IChunker;
 
 import java.util.List;
 
+/**
+ * {@link RecursiveCharacterChunker} is a class that implements the {@link IChunker}
+ * interface and splits a text into chunks recursively with the given separators.
+ *
+ * @author Pablo Sanchidrian Herrera
+ */
 public class RecursiveCharacterChunker implements IChunker {
 
 	private final Config config;
@@ -19,7 +25,8 @@ public class RecursiveCharacterChunker implements IChunker {
 
 	@Override
 	public List<Chunk> split(String content) {
-		return null;
+		return Utils.splitContent(content, config.getChunkSize(), config.getChunkOverlap(), config.getKeepDelimiter(),
+				config.getDelimiters(), config.getTrimWhitespace());
 	}
 
 }

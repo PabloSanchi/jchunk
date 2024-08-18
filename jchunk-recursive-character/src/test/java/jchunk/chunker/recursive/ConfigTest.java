@@ -1,4 +1,5 @@
-import jchunk.chunker.recursive.Config;
+package jchunk.chunker.recursive;
+
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -14,16 +15,26 @@ class ConfigTest {
 
 		assertThat(config.getChunkSize()).isEqualTo(100);
 		assertThat(config.getChunkOverlap()).isEqualTo(20);
-		assertThat(config.getSeparators()).containsExactly("\n\n", "\n", " ", "");
+		assertThat(config.getDelimiters()).containsExactly("\n\n", "\n", " ", "");
+		assertThat(config.getKeepDelimiter()).isEqualTo(Config.Delimiter.START);
+		assertThat(config.getTrimWhitespace()).isTrue();
 	}
 
 	@Test
 	void testCustomConfig() {
-		Config config = Config.builder().chunkSize(50).chunkOverlap(10).separators(List.of("-", "!", "?")).build();
+		Config config = Config.builder()
+			.chunkSize(50)
+			.chunkOverlap(10)
+			.separators(List.of("-", "!", "?"))
+			.keepDelimiter(Config.Delimiter.END)
+			.trimWhitespace(false)
+			.build();
 
 		assertThat(config.getChunkSize()).isEqualTo(50);
 		assertThat(config.getChunkOverlap()).isEqualTo(10);
-		assertThat(config.getSeparators()).containsExactly("-", "!", "?");
+		assertThat(config.getDelimiters()).containsExactly("-", "!", "?");
+		assertThat(config.getKeepDelimiter()).isEqualTo(Config.Delimiter.END);
+		assertThat(config.getTrimWhitespace()).isFalse();
 	}
 
 	@Test
