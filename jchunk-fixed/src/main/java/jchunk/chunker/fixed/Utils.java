@@ -29,7 +29,7 @@ public class Utils {
 		String delimiter = config.getDelimiter();
 		Config.Delimiter keepDelimiter = config.getKeepDelimiter();
 
-		if (delimiter.isBlank()) {
+		if (delimiter.isEmpty()) {
 			return content.chars().mapToObj(c -> String.valueOf((char) c)).toList();
 		}
 
