@@ -21,9 +21,9 @@
 	</modules>
 
 	<scm>
+		<connection>scm:git:git://github.com/PabloSanchi/jchunk.git</connection>
+		<developerConnection>scm:git:git@github.com:PabloSanchi/jchunk.git</developerConnection>
 		<url>https://github.com/PabloSanchi/jchunk</url>
-		<connection>git://github.com/PabloSanchi/jchunk.git</connection>
-		<developerConnection>git@github.com:PabloSanchi/jchunk.git</developerConnection>
 	</scm>
 
 	<issueManagement>
@@ -56,6 +56,7 @@
 		<maven-site-plugin.version>4.0.0-M13</maven-site-plugin.version>
 		<maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
 		<jacoco.version>0.8.12</jacoco.version>
+		<scm.version>2.1.0</scm.version>
 	</properties>
 
 	<dependencyManagement>
@@ -151,6 +152,11 @@
 					<releaseVersionPolicy>incremental</releaseVersionPolicy>
 					<developmentVersionPolicy>incremental</developmentVersionPolicy>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-scm-plugin</artifactId>
+				<version>${scm.version}</version>
 			</plugin>
 		</plugins>
 	</build>
