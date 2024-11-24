@@ -5,7 +5,7 @@
 
 	<groupId>com.github.PabloSanchi</groupId>
 	<artifactId>jchunk</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.0-SNAPSHOT</version>
 
 	<packaging>pom</packaging>
 	<url>https://github.com/PabloSanchi/text-chunker-module.git</url>
@@ -140,6 +140,18 @@
 					</execution>
 				</executions>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<version>3.0.0-M5</version>
+				<configuration>
+					<tagNameFormat>v@{project.version}</tagNameFormat>
+					<autoVersionSubmodules>true</autoVersionSubmodules>
+					<pushChanges>true</pushChanges>
+					<releaseVersionPolicy>incremental</releaseVersionPolicy>
+					<developmentVersionPolicy>incremental</developmentVersionPolicy>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 
@@ -158,6 +170,20 @@
 	</repositories>
 
 	<pluginRepositories>
+		<!-- Maven Central Repository -->
+		<pluginRepository>
+			<id>central</id>
+			<url>https://repo.maven.apache.org/maven2</url>
+			<name>Maven Central</name>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</pluginRepository>
+
+		<!-- Spring Milestones Repository -->
 		<pluginRepository>
 			<id>spring-milestones</id>
 			<url>https://repo.spring.io/milestone</url>
