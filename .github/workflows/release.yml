@@ -1,10 +1,8 @@
+
 name: Maven Release
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
 
 jobs:
   release:
@@ -14,7 +12,23 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0 # Ensures full Git history for Maven release plugin
+          ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Set up Git Author Identity
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Persist SSH Configuration
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          echo "Host github.com" > ~/.ssh/config
+          echo "  StrictHostKeyChecking no" >> ~/.ssh/config
+          echo "  IdentityFile ~/.ssh/id_ed25519" >> ~/.ssh/config
+          eval "$(ssh-agent -s)"
+          ssh-add ~/.ssh/id_ed25519
 
       - name: Set up JDK
         uses: actions/setup-java@v3
@@ -30,11 +44,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven
 
-      - name: Configure Git with Token
-        run: |
-          git remote set-url origin https://x-access-token:${{ secrets.RELEASE_TOKEN }}@github.com/PabloSanchi/jchunk.git
+      - name: Set Correct Remote URL
+        run: git remote set-url origin git@github.com:PabloSanchi/jchunk.git
 
       - name: Run Maven Release
         run: |
-          mvn release:prepare -B
-          mvn release:perform -B
+          mvn release:prepare -B -e -X
+          mvn release:perform -B -e -X

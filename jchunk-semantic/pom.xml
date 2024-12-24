@@ -4,7 +4,7 @@
     <parent>
         <groupId>com.github.PabloSanchi</groupId>
         <artifactId>jchunk</artifactId>
-        <version>0.0.0-SNAPSHOT</version>
+        <version>0.0.1-SNAPSHOT</version>
     </parent>
 
     <artifactId>jchunk-semantic</artifactId>
@@ -17,8 +17,8 @@
         <connection>scm:git:git://github.com/PabloSanchi/jchunk.git</connection>
         <developerConnection>scm:git:git@github.com:PabloSanchi/jchunk.git</developerConnection>
         <url>https://github.com/PabloSanchi/jchunk</url>
-      <tag>v0.0.0</tag>
-  </scm>
+        <tag>v0.0.0</tag>
+    </scm>
 
     <dependencies>
         <dependency>
