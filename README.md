@@ -52,7 +52,7 @@ The chunk size is the number of characters each chunk will contain. For example,
 **Example:**
 - Input Text: "This is an example of character splitting."
 - Chunk Size: 10
-- Output Chunks: `["This is an", " example o", "f characte", "r splitti", "ng."]`
+- Output Chunks: `["This is an", " example o", "f characte", "r splittin", "g."]`
 
 ### 2. Chunk Overlap
 Chunk overlap refers to the number of characters that will overlap between consecutive chunks. This helps in maintaining context across chunks by ensuring that a portion of the text at the end of one chunk is repeated at the beginning of the next chunk.
@@ -61,13 +61,14 @@ Chunk overlap refers to the number of characters that will overlap between conse
 - Input Text: "This is an example of character splitting."
 - Chunk Size: 10
 - Chunk Overlap: 4
-- Output Chunks: `["This is an", " an examp", "mple of ch", "aracter sp", " splitting."]`
+- Output Chunks: `["This is an", "s an examp", "xample of", "of charac", "aracter sp", "r splittin", "tting."]`
 
 ### 3. Separators
 Separators are specific character sequences used to split the text. For instance, you might want to split your text at every comma or period.
 
 **Example:**
 - Input Text: "This is an example. Let's split on periods. Okay?"
+- Chunk Size: 20
 - Separator: ". "
 - Output Chunks: ["This is an example", "Let's split on periods", "Okay?"]
 
