@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 import java.util.stream.IntStream;
 
 public class Utils {
@@ -49,7 +50,7 @@ public class Utils {
 	private static List<String> splitWithDelimiter(String content, String delimiter, Config.Delimiter keepDelimiter) {
 
 		if (keepDelimiter == Config.Delimiter.NONE) {
-			return Arrays.stream(content.split(delimiter)).filter(s -> !s.isBlank()).toList();
+			return Arrays.stream(content.split(Pattern.quote(delimiter))).filter(s -> !s.isBlank()).toList();
 		}
 
 		String withDelimiter = "((?<=%1$s)|(?=%1$s))";
