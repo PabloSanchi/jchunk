@@ -4,7 +4,7 @@
 
 	<groupId>com.github.PabloSanchi</groupId>
 	<artifactId>jchunk</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
 
 	<packaging>pom</packaging>
 	<url>https://github.com/PabloSanchi/text-chunker-module.git</url>
@@ -23,7 +23,7 @@
 		<connection>scm:git:git://github.com/PabloSanchi/jchunk.git</connection>
 		<developerConnection>scm:git:git@github.com:PabloSanchi/jchunk.git</developerConnection>
 		<url>https://github.com/PabloSanchi/jchunk</url>
-	  	<tag>v0.0.0</tag>
+	  	<tag>v0.0.1</tag>
   </scm>
 
 	<issueManagement>
