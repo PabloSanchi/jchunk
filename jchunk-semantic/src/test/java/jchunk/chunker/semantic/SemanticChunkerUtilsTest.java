@@ -8,9 +8,12 @@ import org.springframework.ai.embedding.EmbeddingModel;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.within;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
 class SemanticChunkerUtilsTest {
+
+	final static double MARGIN = 0.0001f;
 
 	final EmbeddingModel embeddingModel;
 
@@ -144,14 +147,17 @@ class SemanticChunkerUtilsTest {
 	@Test
 	void embedSentencesTest() {
 		Mockito.when(embeddingModel.embed(Mockito.anyList()))
-			.thenReturn(List.of(List.of(1.0, 2.0, 3.0), List.of(4.0, 5.0, 6.0)));
+			.thenReturn(List.of(new float[] { 1.0f, 2.0f, 3.0f }, new float[] { 4.0f, 5.0f, 6.0f }));
 
 		List<Sentence> sentences = List.of(Sentence.builder().combined("This is a test sentence.").build(),
 				Sentence.builder().combined("How are u?").build());
 
 		List<Sentence> expectedResult = List.of(
-				Sentence.builder().combined("This is a test sentence.").embedding(List.of(1.0, 2.0, 3.0)).build(),
-				Sentence.builder().combined("How are u?").embedding(List.of(4.0, 5.0, 6.0)).build());
+				Sentence.builder()
+					.combined("This is a test sentence.")
+					.embedding(new float[] { 1.0f, 2.0f, 3.0f })
+					.build(),
+				Sentence.builder().combined("How are u?").embedding(new float[] { 4.0f, 5.0f, 6.0f }).build());
 
 		List<Sentence> result = Utils.embedSentences(embeddingModel, sentences);
 
@@ -166,18 +172,18 @@ class SemanticChunkerUtilsTest {
 
 	@Test
 	void testIdenticalVectors() {
-		List<Double> embedding1 = List.of(1.0, 2.0, 3.0);
-		List<Double> embedding2 = List.of(1.0, 2.0, 3.0);
+		float[] embedding1 = new float[] { 1.0f, 2.0f, 3.0f };
+		float[] embedding2 = new float[] { 1.0f, 2.0f, 3.0f };
 
 		double result = Utils.cosineSimilarity(embedding1, embedding2);
 
-		assertThat(result).isEqualTo(1.0);
+		assertThat(result).isCloseTo(1.0, within(MARGIN));
 	}
 
 	@Test
 	void testOrthogonalVectors() {
-		List<Double> embedding1 = List.of(1.0, 0.0, 0.0);
-		List<Double> embedding2 = List.of(0.0, 1.0, 0.0);
+		float[] embedding1 = new float[] { 1.0f, 0.0f, 0.0f };
+		float[] embedding2 = new float[] { 0.0f, 1.0f, 0.0f };
 
 		double result = Utils.cosineSimilarity(embedding1, embedding2);
 
@@ -186,28 +192,28 @@ class SemanticChunkerUtilsTest {
 
 	@Test
 	void testOppositeVectors() {
-		List<Double> embedding1 = List.of(1.0, 2.0, 3.0);
-		List<Double> embedding2 = List.of(-1.0, -2.0, -3.0);
+		float[] embedding1 = new float[] { 1.0f, 2.0f, 3.0f };
+		float[] embedding2 = new float[] { -1.0f, -2.0f, -3.0f };
 
 		double result = Utils.cosineSimilarity(embedding1, embedding2);
 
-		assertThat(result).isEqualTo(-1.0);
+		assertThat(result).isCloseTo(-1.0, within(MARGIN));
 	}
 
 	@Test
 	void testDifferentMagnitudeVectors() {
-		List<Double> embedding1 = List.of(1.0, 2.0, 3.0);
-		List<Double> embedding2 = List.of(2.0, 4.0, 6.0);
+		float[] embedding1 = new float[] { 1.0f, 2.0f, 3.0f };
+		float[] embedding2 = new float[] { 2.0f, 4.0f, 6.0f };
 
 		double result = Utils.cosineSimilarity(embedding1, embedding2);
 
-		assertThat(result).isEqualTo(1.0);
+		assertThat(result).isCloseTo(1.0, within(MARGIN));
 	}
 
 	@Test
 	void testZeroVectors() {
-		List<Double> embedding1 = List.of(0.0, 0.0, 0.0);
-		List<Double> embedding2 = List.of(0.0, 0.0, 0.0);
+		float[] embedding1 = new float[] { 0.0f, 0.0f, 0.0f };
+		float[] embedding2 = new float[] { 0.0f, 0.0f, 0.0f };
 
 		double result = Utils.cosineSimilarity(embedding1, embedding2);
 
