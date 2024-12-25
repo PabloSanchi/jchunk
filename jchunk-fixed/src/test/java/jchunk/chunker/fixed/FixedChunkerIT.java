@@ -25,7 +25,7 @@ class FixedChunkerIT {
 		List<Chunk> chunks = chunker.split(CONTENT);
 
 		assertThat(chunks).isNotNull().hasSize(1);
-
+		assertThat(chunks).containsExactlyElementsOf(expectedChunks);
 	}
 
 	@Test
