@@ -15,7 +15,7 @@ public class Sentence {
 
 	private String combined;
 
-	private List<Double> embedding;
+	private float[] embedding;
 
 	public Integer getIndex() {
 		return index;
@@ -41,11 +41,11 @@ public class Sentence {
 		this.combined = combined;
 	}
 
-	public List<Double> getEmbedding() {
+	public float[] getEmbedding() {
 		return embedding;
 	}
 
-	public void setEmbedding(List<Double> embedding) {
+	public void setEmbedding(float[] embedding) {
 		this.embedding = embedding;
 	}
 
@@ -72,7 +72,7 @@ public class Sentence {
 			return this;
 		}
 
-		public Builder embedding(List<Double> embedding) {
+		public Builder embedding(float[] embedding) {
 			this.sentence.setEmbedding(embedding);
 			return this;
 		}

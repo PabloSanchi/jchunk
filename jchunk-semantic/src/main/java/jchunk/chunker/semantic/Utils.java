@@ -95,7 +95,7 @@ public class Utils {
 
 		List<String> sentencesText = sentences.stream().map(Sentence::getContent).toList();
 
-		List<List<Double>> embeddings = embeddingModel.embed(sentencesText);
+		List<float[]> embeddings = embeddingModel.embed(sentencesText);
 
 		return IntStream.range(0, sentences.size()).mapToObj(i -> {
 			Sentence sentence = sentences.get(i);
@@ -110,13 +110,13 @@ public class Utils {
 	 * @param sentence2 the second sentence embedding
 	 * @return the cosine similarity between the sentences
 	 */
-	public static Double cosineSimilarity(List<Double> sentence1, List<Double> sentence2) {
+	public static Double cosineSimilarity(float[] sentence1, float[] sentence2) {
 		assert sentence1 != null : "The first sentence embedding cannot be null";
 		assert sentence2 != null : "The second sentence embedding cannot be null";
-		assert sentence1.size() == sentence2.size() : "The sentence embeddings must have the same size";
+		assert sentence1.length == sentence2.length : "The sentence embeddings must have the same size";
 
-		INDArray arrayA = Nd4j.create(sentence1.stream().mapToDouble(Double::doubleValue).toArray());
-		INDArray arrayB = Nd4j.create(sentence2.stream().mapToDouble(Double::doubleValue).toArray());
+		INDArray arrayA = Nd4j.create(sentence1);
+		INDArray arrayB = Nd4j.create(sentence2);
 
 		arrayA = arrayA.div(arrayA.norm2Number());
 		arrayB = arrayB.div(arrayB.norm2Number());
