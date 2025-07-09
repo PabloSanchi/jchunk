@@ -1,7 +1,5 @@
 package jchunk.chunker.semantic;
 
-import java.util.List;
-
 /**
  * Sentence class to represent a sentence during the splitting process
  *
@@ -9,7 +7,7 @@ import java.util.List;
  */
 public class Sentence {
 
-	private Integer index;
+	private int index;
 
 	private String content;
 
@@ -17,11 +15,11 @@ public class Sentence {
 
 	private float[] embedding;
 
-	public Integer getIndex() {
+	public int getIndex() {
 		return index;
 	}
 
-	public void setIndex(Integer index) {
+	public void setIndex(int index) {
 		this.index = index;
 	}
 

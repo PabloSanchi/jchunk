@@ -4,7 +4,7 @@ on:
   push:
     branches: [ "releases/*", "main" ]
   pull_request:
-    branches: [ "releases/*", "main" ]
+    types: [ opened, synchronize, reopened ]
 
 jobs:
   build:
@@ -19,5 +19,5 @@ jobs:
         java-version: '21'
         distribution: 'temurin'
         cache: maven
-    - name: Build with Maven
-      run: mvn -B package --file pom.xml
+    - name: Run tests
+      run: mvn -B clean verify
