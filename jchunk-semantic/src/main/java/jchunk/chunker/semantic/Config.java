@@ -5,34 +5,10 @@ package jchunk.chunker.semantic;
  *
  * @author Pablo Sanchidrian Herrera
  */
-public class Config {
-
-	private final SentenceSplitingStrategy sentenceSplitingStrategy;
-
-	private final Integer percentile;
-
-	private final Integer bufferSize;
-
-	public SentenceSplitingStrategy getSentenceSplitingStrategy() {
-		return sentenceSplitingStrategy;
-	}
-
-	public Integer getPercentile() {
-		return percentile;
-	}
-
-	public Integer getBufferSize() {
-		return bufferSize;
-	}
-
-	public Config(SentenceSplitingStrategy sentenceSplitingStrategy, Integer percentile, Integer bufferSize) {
-		this.sentenceSplitingStrategy = sentenceSplitingStrategy;
-		this.percentile = percentile;
-		this.bufferSize = bufferSize;
-	}
+public record Config(SentenceSplittingStrategy sentenceSplittingStrategy, int percentile, int bufferSize) {
 
 	/**
-	 * {@return the default config}
+	 * @return the default config
 	 */
 	public static Config defaultConfig() {
 		return builder().build();
@@ -44,29 +20,29 @@ public class Config {
 
 	public static class Builder {
 
-		private SentenceSplitingStrategy sentenceSplitingStrategy = SentenceSplitingStrategy.DEFAULT;
+		private SentenceSplittingStrategy sentenceSplittingStrategy = SentenceSplittingStrategy.DEFAULT;
 
-		private Integer percentile = 95;
+		private int percentile = 95;
 
-		private Integer bufferSize = 1;
+		private int bufferSize = 1;
 
-		public Builder sentenceSplittingStrategy(SentenceSplitingStrategy sentenceSplitingStrategy) {
-			this.sentenceSplitingStrategy = sentenceSplitingStrategy;
+		public Builder sentenceSplittingStrategy(SentenceSplittingStrategy sentenceSplittingStrategy) {
+			this.sentenceSplittingStrategy = sentenceSplittingStrategy;
 			return this;
 		}
 
-		public Builder percentile(Integer percentile) {
+		public Builder percentile(int percentile) {
 			this.percentile = percentile;
 			return this;
 		}
 
-		public Builder bufferSize(Integer bufferSize) {
+		public Builder bufferSize(int bufferSize) {
 			this.bufferSize = bufferSize;
 			return this;
 		}
 
 		public Config build() {
-			return new Config(sentenceSplitingStrategy, percentile, bufferSize);
+			return new Config(sentenceSplittingStrategy, percentile, bufferSize);
 		}
 
 	}
