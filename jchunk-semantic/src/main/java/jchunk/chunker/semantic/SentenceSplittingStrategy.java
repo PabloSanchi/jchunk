@@ -5,13 +5,13 @@ package jchunk.chunker.semantic;
  *
  * @author Pablo Sanchidrian Herrera
  */
-public enum SentenceSplitingStrategy {
+public enum SentenceSplittingStrategy {
 
 	DEFAULT("(?<=[.?!])\\s+"), LINE_BREAK("\n"), PARAGRAPH("\n\n");
 
 	private final String strategy;
 
-	SentenceSplitingStrategy(String strategy) {
+	SentenceSplittingStrategy(String strategy) {
 		this.strategy = strategy;
 	}
 
