@@ -3,10 +3,9 @@ package jchunk.chunker.semantic;
 import jchunk.chunker.core.chunk.Chunk;
 import jchunk.chunker.core.chunk.IChunker;
 import jchunk.chunker.core.decorators.VisibleForTesting;
-import org.nd4j.common.io.Assert;
-import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 import org.springframework.ai.embedding.EmbeddingModel;
+import org.springframework.util.Assert;
 
 import java.util.Arrays;
 import java.util.List;
@@ -29,22 +28,22 @@ public class SemanticChunker implements IChunker {
 	 * Constructor
 	 * @param embeddingModel the embedding model to use
 	 */
-	public SemanticChunker(EmbeddingModel embeddingModel) {
+	public SemanticChunker(final EmbeddingModel embeddingModel) {
 		this(embeddingModel, Config.defaultConfig());
 	}
 
-	public SemanticChunker(EmbeddingModel embeddingModel, Config config) {
+	public SemanticChunker(final EmbeddingModel embeddingModel, final Config config) {
 		this.embeddingModel = embeddingModel;
 		this.config = config;
 	}
 
 	@Override
 	public List<Chunk> split(String content) {
-		List<Sentence> sentences = splitSentences(content, config.getSentenceSplitingStrategy());
-		sentences = combineSentences(sentences, config.getBufferSize());
+		var sentences = splitSentences(content, config.sentenceSplittingStrategy());
+		sentences = combineSentences(sentences, config.bufferSize());
 		sentences = embedSentences(embeddingModel, sentences);
-		List<Double> similarities = calculateSimilarities(sentences);
-		List<Integer> breakPoints = calculateBreakPoints(similarities, config.getPercentile());
+		var similarities = calculateSimilarities(sentences);
+		var breakPoints = calculateBreakPoints(similarities, config.percentile());
 		return generateChunks(sentences, breakPoints);
 	}
 
@@ -54,9 +53,9 @@ public class SemanticChunker implements IChunker {
 	 * @return the list of sentences
 	 */
 	@VisibleForTesting
-	private List<Sentence> splitSentences(String content, SentenceSplitingStrategy splitingStrategy) {
-		AtomicInteger index = new AtomicInteger(0);
-		return Arrays.stream(content.split(splitingStrategy.getStrategy()))
+	List<Sentence> splitSentences(String content, SentenceSplittingStrategy splittingStrategy) {
+		var index = new AtomicInteger(0);
+		return Arrays.stream(content.split(splittingStrategy.getStrategy()))
 			.map(sentence -> Sentence.builder().content(sentence).index(index.getAndIncrement()).build())
 			.toList();
 	}
@@ -71,16 +70,16 @@ public class SemanticChunker implements IChunker {
 	 * @return the list of combined sentences
 	 */
 	@VisibleForTesting
-	private List<Sentence> combineSentences(List<Sentence> sentences, Integer bufferSize) {
-		assert sentences != null : "The list of sentences cannot be null";
-		assert !sentences.isEmpty() : "The list of sentences cannot be empty";
-		assert bufferSize != null && bufferSize > 0 : "The buffer size cannot be null nor 0";
-		assert bufferSize < sentences.size() : "The buffer size cannot be greater equal than the input length";
+	List<Sentence> combineSentences(List<Sentence> sentences, Integer bufferSize) {
+		Assert.notNull(sentences, "The list of sentences cannot be null");
+		Assert.notEmpty(sentences, "The list of sentences cannot be empty");
+		Assert.isTrue(bufferSize != null && bufferSize > 0, "The buffer size cannot be null nor 0");
+		Assert.isTrue(bufferSize < sentences.size(), "The buffer size cannot be greater equal than the input length");
 
-		int n = sentences.size();
-		int windowSize = bufferSize * 2 + 1;
-		int currentWindowSize = 0;
-		StringBuilder windowBuilder = new StringBuilder();
+		var n = sentences.size();
+		var windowSize = bufferSize * 2 + 1;
+		var currentWindowSize = 0;
+		var windowBuilder = new StringBuilder();
 
 		for (int i = 0; i <= Math.min(bufferSize, n - 1); i++) {
 			windowBuilder.append(sentences.get(i).getContent()).append(" ");
@@ -116,14 +115,12 @@ public class SemanticChunker implements IChunker {
 	 * @return the list of sentences with the embeddings
 	 */
 	@VisibleForTesting
-	private List<Sentence> embedSentences(EmbeddingModel embeddingModel, List<Sentence> sentences) {
-
-		List<String> sentencesText = sentences.stream().map(Sentence::getContent).toList();
-
-		List<float[]> embeddings = embeddingModel.embed(sentencesText);
+	List<Sentence> embedSentences(final EmbeddingModel embeddingModel, final List<Sentence> sentences) {
+		var sentencesText = sentences.stream().map(Sentence::getContent).toList();
+		var embeddings = embeddingModel.embed(sentencesText);
 
 		return IntStream.range(0, sentences.size()).mapToObj(i -> {
-			Sentence sentence = sentences.get(i);
+			var sentence = sentences.get(i);
 			sentence.setEmbedding(embeddings.get(i));
 			return sentence;
 		}).toList();
@@ -136,18 +133,14 @@ public class SemanticChunker implements IChunker {
 	 * @return the cosine similarity between the sentences
 	 */
 	@VisibleForTesting
-	private Double cosineSimilarity(float[] sentence1, float[] sentence2) {
-		assert sentence1 != null : "The first sentence embedding cannot be null";
-		assert sentence2 != null : "The second sentence embedding cannot be null";
-		assert sentence1.length == sentence2.length : "The sentence embeddings must have the same size";
+	Double cosineSimilarity(final float[] sentence1, final float[] sentence2) {
+		Assert.notNull(sentence1, "The first sentence embedding cannot be null");
+		Assert.notNull(sentence2, "The second sentence embedding cannot be null");
+		Assert.isTrue(sentence1.length == sentence2.length, "The sentence embeddings must have the same size");
 
-		INDArray arrayA = Nd4j.create(sentence1);
-		INDArray arrayB = Nd4j.create(sentence2);
-
-		arrayA = arrayA.div(arrayA.norm2Number());
-		arrayB = arrayB.div(arrayB.norm2Number());
-
-		return Nd4j.getBlasWrapper().dot(arrayA, arrayB);
+		try (var arrayA = Nd4j.create(sentence1); var arrayB = Nd4j.create(sentence2)) {
+			return Nd4j.getBlasWrapper().dot(arrayA.div(arrayA.norm2Number()), arrayB.div(arrayB.norm2Number()));
+		}
 	}
 
 	/**
@@ -156,7 +149,7 @@ public class SemanticChunker implements IChunker {
 	 * @return the list of similarities (List of double)
 	 */
 	@VisibleForTesting
-	private List<Double> calculateSimilarities(List<Sentence> sentences) {
+	List<Double> calculateSimilarities(final List<Sentence> sentences) {
 		return IntStream.range(0, sentences.size() - 1).parallel().mapToObj(i -> {
 			Sentence sentence1 = sentences.get(i);
 			Sentence sentence2 = sentences.get(i + 1);
@@ -170,10 +163,10 @@ public class SemanticChunker implements IChunker {
 	 * @return the list of break points indices
 	 */
 	@VisibleForTesting
-	private List<Integer> calculateBreakPoints(List<Double> distances, Integer percentile) {
+	List<Integer> calculateBreakPoints(final List<Double> distances, final int percentile) {
 		Assert.isTrue(distances != null, "The list of distances cannot be null");
 
-		double breakpointDistanceThreshold = calculatePercentile(distances, percentile);
+		var breakpointDistanceThreshold = calculatePercentile(distances, percentile);
 
 		return IntStream.range(0, distances.size())
 			.filter(i -> distances.get(i) >= breakpointDistanceThreshold)
@@ -181,14 +174,14 @@ public class SemanticChunker implements IChunker {
 			.toList();
 	}
 
-	private static Double calculatePercentile(List<Double> distances, int percentile) {
+	private static Double calculatePercentile(final List<Double> distances, final int percentile) {
 		Assert.isTrue(distances != null, "The list of distances cannot be null");
 		Assert.isTrue(percentile > 0 && percentile < 100, "The percentile must be between 0 and 100");
 
-		distances = distances.stream().sorted().toList();
+		var sortedDistances = distances.stream().sorted().toList();
 
-		int rank = (int) Math.ceil(percentile / 100.0 * distances.size());
-		return distances.get(rank - 1);
+		var rank = (int) Math.ceil(percentile / 100.0 * distances.size());
+		return sortedDistances.get(rank - 1);
 	}
 
 	/**
@@ -198,12 +191,12 @@ public class SemanticChunker implements IChunker {
 	 * @return the list of chunks
 	 */
 	@VisibleForTesting
-	private List<Chunk> generateChunks(List<Sentence> sentences, List<Integer> breakPoints) {
+	List<Chunk> generateChunks(final List<Sentence> sentences, final List<Integer> breakPoints) {
 		Assert.isTrue(sentences != null, "The list of sentences cannot be null");
 		Assert.isTrue(!sentences.isEmpty(), "The list of sentences cannot be empty");
 		Assert.isTrue(breakPoints != null, "The list of break points cannot be null");
 
-		AtomicInteger index = new AtomicInteger(0);
+		var index = new AtomicInteger(0);
 
 		return IntStream.range(0, breakPoints.size() + 1).mapToObj(i -> {
 			int start = i == 0 ? 0 : breakPoints.get(i - 1) + 1;
