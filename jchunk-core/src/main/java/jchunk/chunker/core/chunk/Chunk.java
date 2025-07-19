@@ -9,7 +9,7 @@ package jchunk.chunker.core.chunk;
  * @param content the actual content of the chunk
  * @author Pablo Sanchidrian Herrera
  */
-public record Chunk(Integer id, String content) {
+public record Chunk(int id, String content) {
 
 	public static Builder builder() {
 		return new Builder();
@@ -17,11 +17,11 @@ public record Chunk(Integer id, String content) {
 
 	public static class Builder {
 
-		private Integer id;
+		private int id;
 
 		private String content;
 
-		public Builder id(Integer id) {
+		public Builder id(int id) {
 			this.id = id;
 			return this;
 		}
