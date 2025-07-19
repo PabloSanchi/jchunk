@@ -11,7 +11,8 @@ import java.util.List;
  *
  * @author Pablo Sanchidrian Herrera
  */
-public record Config(int chunkSize, int chunkOverlap, List<String> delimiters, Delimiter keepDelimiter, boolean trimWhiteSpace) {
+public record Config(int chunkSize, int chunkOverlap, List<String> delimiters, Delimiter keepDelimiter,
+		boolean trimWhiteSpace) {
 
 	/**
 	 * @return the default config

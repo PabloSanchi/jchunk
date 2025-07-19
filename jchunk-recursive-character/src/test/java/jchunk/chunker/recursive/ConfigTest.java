@@ -44,26 +44,16 @@ class ConfigTest {
 	@ParameterizedTest
 	@MethodSource("provideInvalidConfiguration")
 	void testInvalidConfig(Config.Builder invalidConfigToBuild, String expectedMessage) {
-		assertThatThrownBy(invalidConfigToBuild::build)
-				.isInstanceOf(IllegalArgumentException.class)
-				.hasMessage(expectedMessage);
+		assertThatThrownBy(invalidConfigToBuild::build).isInstanceOf(IllegalArgumentException.class)
+			.hasMessage(expectedMessage);
 	}
 
 	private static Stream<Arguments> provideInvalidConfiguration() {
-		return Stream.of(
-				Arguments.of(
-						Config.builder().chunkSize(0),
-						"Chunk size must be greater than 0"),
-				Arguments.of(
-						Config.builder().chunkSize(-1),
-						"Chunk size must be greater than 0"),
-				Arguments.of(
-						Config.builder().chunkOverlap(-1),
-						"Chunk overlap must be greater than or equal to 0"),
-				Arguments.of(
-						Config.builder().chunkSize(10).chunkOverlap(20),
-						"Chunk size must be greater than chunk overlap")
-		);
+		return Stream.of(Arguments.of(Config.builder().chunkSize(0), "Chunk size must be greater than 0"),
+				Arguments.of(Config.builder().chunkSize(-1), "Chunk size must be greater than 0"),
+				Arguments.of(Config.builder().chunkOverlap(-1), "Chunk overlap must be greater than or equal to 0"),
+				Arguments.of(Config.builder().chunkSize(10).chunkOverlap(20),
+						"Chunk size must be greater than chunk overlap"));
 	}
 
 }

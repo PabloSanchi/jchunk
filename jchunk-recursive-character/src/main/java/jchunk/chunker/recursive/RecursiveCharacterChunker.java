@@ -53,7 +53,6 @@ public class RecursiveCharacterChunker implements IChunker {
 		var goodSplits = new ArrayList<String>();
 		var delimiterToUse = config.keepDelimiter() != Config.Delimiter.NONE ? "" : delimiter;
 
-
 		var chunks = new ArrayList<Chunk>();
 
 		for (String split : splits) {
@@ -69,9 +68,9 @@ public class RecursiveCharacterChunker implements IChunker {
 
 				if (newDelimiters.isEmpty()) {
 					Chunk chunk = Chunk.builder()
-							.id(index.getAndIncrement())
-							.content(config.trimWhiteSpace() ? split.trim() : split)
-							.build();
+						.id(index.getAndIncrement())
+						.content(config.trimWhiteSpace() ? split.trim() : split)
+						.build();
 					chunks.add(chunk);
 				}
 				else {
@@ -144,8 +143,8 @@ public class RecursiveCharacterChunker implements IChunker {
 
 		splits.add(preSplits.getFirst());
 		IntStream.range(1, preSplits.size() - 1)
-				.filter(i -> i % 2 == 1)
-				.forEach(i -> splits.add(preSplits.get(i).concat(preSplits.get(i + 1))));
+			.filter(i -> i % 2 == 1)
+			.forEach(i -> splits.add(preSplits.get(i).concat(preSplits.get(i + 1))));
 
 		return splits.stream().filter(s -> !s.isBlank()).toList();
 	}
@@ -160,13 +159,11 @@ public class RecursiveCharacterChunker implements IChunker {
 		var splits = new ArrayList<String>();
 
 		IntStream.range(0, preSplits.size() - 1)
-				.filter(i -> i % 2 == 0)
-				.forEach(i -> splits.add(preSplits.get(i).concat(preSplits.get(i + 1))));
+			.filter(i -> i % 2 == 0)
+			.forEach(i -> splits.add(preSplits.get(i).concat(preSplits.get(i + 1))));
 		splits.add(preSplits.getLast());
 
-		return splits.stream()
-				.filter(s -> !s.isBlank())
-				.toList();
+		return splits.stream().filter(s -> !s.isBlank()).toList();
 	}
 
 	/**
