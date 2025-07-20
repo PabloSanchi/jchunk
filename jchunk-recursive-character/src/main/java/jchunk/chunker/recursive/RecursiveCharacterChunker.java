@@ -1,5 +1,6 @@
 package jchunk.chunker.recursive;
 
+import jchunk.chunker.Delimiter;
 import jchunk.chunker.core.chunk.Chunk;
 import jchunk.chunker.core.chunk.IChunker;
 
@@ -51,7 +52,7 @@ public class RecursiveCharacterChunker implements IChunker {
 		var splits = splitWithDelimiter(content, delimiter);
 
 		var goodSplits = new ArrayList<String>();
-		var delimiterToUse = config.keepDelimiter() != Config.Delimiter.NONE ? "" : delimiter;
+		var delimiterToUse = config.keepDelimiter() != Delimiter.NONE ? "" : delimiter;
 
 		var chunks = new ArrayList<Chunk>();
 
@@ -128,13 +129,13 @@ public class RecursiveCharacterChunker implements IChunker {
 		String withDelimiter = "((?<=%1$s)|(?=%1$s))";
 		List<String> preSplits = new ArrayList<>(List.of(content.split(String.format(withDelimiter, delimiter))));
 
-		return config.keepDelimiter() == Config.Delimiter.START ? splitWithDelimiterStart(preSplits)
+		return config.keepDelimiter() == Delimiter.START ? splitWithDelimiterStart(preSplits)
 				: splitWithDelimiterEnd(preSplits);
 	}
 
 	/**
 	 * Splits the content into sentences using the delimiter at the start of each
-	 * sentence. {@link Config.Delimiter#START}
+	 * sentence. {@link Delimiter#START}
 	 * @param preSplits pre-splits by the delimiter
 	 * @return the list of split sentences
 	 */
@@ -151,7 +152,7 @@ public class RecursiveCharacterChunker implements IChunker {
 
 	/**
 	 * Splits the content into sentences using the delimiter at the end of each sentence.
-	 * {@link Config.Delimiter#END}
+	 * {@link Delimiter#END}
 	 * @param preSplits the pre-splits by the delimiter
 	 * @return the list of split sentences
 	 */
