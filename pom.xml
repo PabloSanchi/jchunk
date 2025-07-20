@@ -13,6 +13,7 @@
 	<description>Enable text chunkers for RAGs in Java</description>
 
 	<modules>
+		<module>commons</module>
 		<module>jchunk-core</module>
 		<module>jchunk-fixed</module>
 		<module>jchunk-recursive-character</module>
