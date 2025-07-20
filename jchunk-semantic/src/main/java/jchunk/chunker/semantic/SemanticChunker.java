@@ -133,7 +133,7 @@ public class SemanticChunker implements IChunker {
 	 * @return the cosine similarity between the sentences
 	 */
 	@VisibleForTesting
-	Double cosineSimilarity(final float[] sentence1, final float[] sentence2) {
+	double cosineSimilarity(final float[] sentence1, final float[] sentence2) {
 		Assert.notNull(sentence1, "The first sentence embedding cannot be null");
 		Assert.notNull(sentence2, "The second sentence embedding cannot be null");
 		Assert.isTrue(sentence1.length == sentence2.length, "The sentence embeddings must have the same size");
