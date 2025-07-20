@@ -1,5 +1,6 @@
 package jchunk.chunker.recursive;
 
+import jchunk.chunker.Delimiter;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -20,7 +21,7 @@ class ConfigTest {
 		assertThat(config.chunkSize()).isEqualTo(100);
 		assertThat(config.chunkOverlap()).isEqualTo(20);
 		assertThat(config.delimiters()).containsExactly("\n\n", "\n", " ", "");
-		assertThat(config.keepDelimiter()).isEqualTo(Config.Delimiter.START);
+		assertThat(config.keepDelimiter()).isEqualTo(Delimiter.START);
 		assertThat(config.trimWhiteSpace()).isTrue();
 	}
 
@@ -30,14 +31,14 @@ class ConfigTest {
 			.chunkSize(50)
 			.chunkOverlap(10)
 			.separators(List.of("-", "!", "?"))
-			.keepDelimiter(Config.Delimiter.END)
+			.keepDelimiter(Delimiter.END)
 			.trimWhitespace(false)
 			.build();
 
 		assertThat(config.chunkSize()).isEqualTo(50);
 		assertThat(config.chunkOverlap()).isEqualTo(10);
 		assertThat(config.delimiters()).containsExactly("-", "!", "?");
-		assertThat(config.keepDelimiter()).isEqualTo(Config.Delimiter.END);
+		assertThat(config.keepDelimiter()).isEqualTo(Delimiter.END);
 		assertThat(config.trimWhiteSpace()).isFalse();
 	}
 

@@ -1,5 +1,6 @@
 package jchunk.chunker.fixed;
 
+import jchunk.chunker.Delimiter;
 import org.springframework.util.Assert;
 
 /**
@@ -9,21 +10,21 @@ import org.springframework.util.Assert;
  */
 public class Config {
 
-	private final Integer chunkSize;
+	private final int chunkSize;
 
-	private final Integer chunkOverlap;
+	private final int chunkOverlap;
 
 	private final String delimiter;
 
-	private final Boolean trimWhitespace;
+	private final boolean trimWhitespace;
 
 	private final Delimiter keepDelimiter;
 
-	public Integer getChunkSize() {
+	public int getChunkSize() {
 		return chunkSize;
 	}
 
-	public Integer getChunkOverlap() {
+	public int getChunkOverlap() {
 		return chunkOverlap;
 	}
 
@@ -31,7 +32,7 @@ public class Config {
 		return delimiter;
 	}
 
-	public Boolean getTrimWhitespace() {
+	public boolean getTrimWhitespace() {
 		return trimWhitespace;
 	}
 
@@ -39,8 +40,7 @@ public class Config {
 		return keepDelimiter;
 	}
 
-	public Config(Integer chunkSize, Integer chunkOverlap, String delimiter, Boolean trimWhitespace,
-			Delimiter keepDelimiter) {
+	public Config(int chunkSize, int chunkOverlap, String delimiter, boolean trimWhitespace, Delimiter keepDelimiter) {
 		this.chunkSize = chunkSize;
 		this.chunkOverlap = chunkOverlap;
 		this.delimiter = delimiter;
@@ -61,24 +61,22 @@ public class Config {
 
 	public static class Builder {
 
-		private Integer chunkSize = 1000;
+		private int chunkSize = 1000;
 
-		private Integer chunkOverlap = 100;
+		private int chunkOverlap = 100;
 
 		private String delimiter = " ";
 
-		private Boolean trimWhitespace = true;
+		private boolean trimWhitespace = true;
 
 		private Delimiter keepDelimiter = Delimiter.NONE;
 
-		public Builder chunkSize(Integer chunkSize) {
-			Assert.isTrue(chunkSize > 0, "Chunk size must be greater than 0");
+		public Builder chunkSize(int chunkSize) {
 			this.chunkSize = chunkSize;
 			return this;
 		}
 
-		public Builder chunkOverlap(Integer chunkOverlap) {
-			Assert.isTrue(chunkOverlap >= 0, "Chunk overlap must be greater than or equal to 0");
+		public Builder chunkOverlap(int chunkOverlap) {
 			this.chunkOverlap = chunkOverlap;
 			return this;
 		}
@@ -88,7 +86,7 @@ public class Config {
 			return this;
 		}
 
-		public Builder trimWhitespace(Boolean trimWhitespace) {
+		public Builder trimWhitespace(boolean trimWhitespace) {
 			this.trimWhitespace = trimWhitespace;
 			return this;
 		}
@@ -99,19 +97,11 @@ public class Config {
 		}
 
 		public Config build() {
+			Assert.isTrue(chunkSize > 0, "Chunk size must be greater than 0");
+			Assert.isTrue(chunkOverlap >= 0, "Chunk overlap must be greater than or equal to 0");
 			Assert.isTrue(chunkSize > chunkOverlap, "Chunk size must be greater than chunk overlap");
 			return new Config(chunkSize, chunkOverlap, delimiter, trimWhitespace, keepDelimiter);
 		}
-
-	}
-
-	/**
-	 * Enum to represent the delimiter configuration NONE: No delimiter START: Delimiter
-	 * at the start of the chunk END: Delimiter at the end of the chunk
-	 */
-	public enum Delimiter {
-
-		NONE, START, END
 
 	}
 

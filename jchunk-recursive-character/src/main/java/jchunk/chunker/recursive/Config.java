@@ -1,5 +1,6 @@
 package jchunk.chunker.recursive;
 
+import jchunk.chunker.Delimiter;
 import org.springframework.util.Assert;
 
 import java.util.ArrayList;
@@ -27,22 +28,22 @@ public record Config(int chunkSize, int chunkOverlap, List<String> delimiters, D
 
 	public static class Builder {
 
-		private Integer chunkSize = 100;
+		private int chunkSize = 100;
 
-		private Integer chunkOverlap = 20;
+		private int chunkOverlap = 20;
 
 		private List<String> delimiters = new ArrayList<>(List.of("\n\n", "\n", " ", ""));
 
 		private Delimiter keepDelimiter = Delimiter.START;
 
-		private Boolean trimWhitespace = true;
+		private boolean trimWhitespace = true;
 
-		public Builder chunkSize(Integer chunkSize) {
+		public Builder chunkSize(int chunkSize) {
 			this.chunkSize = chunkSize;
 			return this;
 		}
 
-		public Builder chunkOverlap(Integer chunkOverlap) {
+		public Builder chunkOverlap(int chunkOverlap) {
 			this.chunkOverlap = chunkOverlap;
 			return this;
 		}
@@ -57,7 +58,7 @@ public record Config(int chunkSize, int chunkOverlap, List<String> delimiters, D
 			return this;
 		}
 
-		public Builder trimWhitespace(Boolean trimWhitespace) {
+		public Builder trimWhitespace(boolean trimWhitespace) {
 			this.trimWhitespace = trimWhitespace;
 			return this;
 		}
@@ -69,21 +70,6 @@ public record Config(int chunkSize, int chunkOverlap, List<String> delimiters, D
 
 			return new Config(chunkSize, chunkOverlap, delimiters, keepDelimiter, trimWhitespace);
 		}
-
-	}
-
-	/**
-	 * Enum to represent the delimiter configuration
-	 * <p>
-	 * <ul>
-	 * <li>NONE: No delimiter</li>
-	 * <li>START: Delimiter at the start of the chunk</li>
-	 * <li>END: Delimiter at the end of the chunk</li>
-	 * </ul>
-	 */
-	public enum Delimiter {
-
-		NONE, START, END
 
 	}
 
