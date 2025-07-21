@@ -3,7 +3,6 @@ package jchunk.chunker.semantic;
 import jchunk.chunker.core.chunk.Chunk;
 import jchunk.chunker.core.chunk.IChunker;
 import jchunk.chunker.core.decorators.VisibleForTesting;
-import org.nd4j.linalg.factory.Nd4j;
 import org.springframework.ai.embedding.EmbeddingModel;
 import org.springframework.util.Assert;
 
@@ -138,9 +137,16 @@ public class SemanticChunker implements IChunker {
 		Assert.notNull(sentence2, "The second sentence embedding cannot be null");
 		Assert.isTrue(sentence1.length == sentence2.length, "The sentence embeddings must have the same size");
 
-		try (var arrayA = Nd4j.create(sentence1); var arrayB = Nd4j.create(sentence2)) {
-			return Nd4j.getBlasWrapper().dot(arrayA.div(arrayA.norm2Number()), arrayB.div(arrayB.norm2Number()));
+		double dotProduct = 0.0;
+		double sentence1Norm = 0.0;
+		double sentence2Norm = 0.0;
+		for (int i = 0; i < sentence1.length; i++) {
+			dotProduct += sentence1[i] * sentence2[i];
+			sentence1Norm += Math.pow(sentence1[i], 2);
+			sentence2Norm += Math.pow(sentence2[i], 2);
 		}
+
+		return dotProduct / (Math.sqrt(sentence1Norm) * Math.sqrt(sentence2Norm));
 	}
 
 	/**
