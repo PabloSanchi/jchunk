@@ -6,11 +6,9 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Annotation to indicate that the visibility of a method, field, or class is increased
- * for testing purposes.
+ * Annotation to indicate that the visibility of a method, field, or class is increased for testing
+ * purposes.
  */
 @Retention(RetentionPolicy.CLASS)
-@Target({ ElementType.METHOD, ElementType.FIELD, ElementType.CONSTRUCTOR, ElementType.TYPE })
-public @interface VisibleForTesting {
-
-}
+@Target({ElementType.METHOD, ElementType.FIELD, ElementType.CONSTRUCTOR, ElementType.TYPE})
+public @interface VisibleForTesting {}
