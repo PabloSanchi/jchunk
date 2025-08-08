@@ -6,22 +6,22 @@ package jchunk.chunker.semantic;
  * @author Pablo Sanchidrian Herrera
  */
 public enum SentenceSplittingStrategy {
+    DEFAULT("(?<=[.?!])\\s+"),
+    LINE_BREAK("\n"),
+    PARAGRAPH("\n\n");
 
-	DEFAULT("(?<=[.?!])\\s+"), LINE_BREAK("\n"), PARAGRAPH("\n\n");
+    private final String strategy;
 
-	private final String strategy;
+    SentenceSplittingStrategy(String strategy) {
+        this.strategy = strategy;
+    }
 
-	SentenceSplittingStrategy(String strategy) {
-		this.strategy = strategy;
-	}
+    @Override
+    public String toString() {
+        return this.strategy;
+    }
 
-	@Override
-	public String toString() {
-		return this.strategy;
-	}
-
-	public String getStrategy() {
-		return this.strategy;
-	}
-
+    public String getStrategy() {
+        return this.strategy;
+    }
 }
