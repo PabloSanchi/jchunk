@@ -4,7 +4,7 @@
 
 	<groupId>com.github.PabloSanchi</groupId>
 	<artifactId>jchunk</artifactId>
-	<version>0.0.3-SNAPSHOT</version>
+	<version>0.0.1-SNAPSHOT</version>
 
 	<packaging>pom</packaging>
 	<url>https://github.com/PabloSanchi/text-chunker-module.git</url>
@@ -47,13 +47,15 @@
 		<maven.compiler.source>21</maven.compiler.source>
 		<maven.compiler.target>21</maven.compiler.target>
 
-		<!-- production dependencies -->
-		<spring-boot.version>3.3.2</spring-boot.version>
-		<spring-ai.version>1.0.0-M4</spring-ai.version>
-		<deeplearning4j.version>1.0.0-M2.1</deeplearning4j.version>
+		<!-- test versions -->
+		<junit.version>5.13.4</junit.version>
+		<assertj.version>3.27.3</assertj.version>
+		<mockito.version>5.18.0</mockito.version>
 
 		<!-- plugin versions -->
-		<spring-javaformat-maven-plugin.version>0.0.39</spring-javaformat-maven-plugin.version>
+		<spotless.version>2.43.0</spotless.version>
+		<palantir-format.version>2.39.0</palantir-format.version>
+		<surefire.version>3.2.5</surefire.version>
 		<maven-site-plugin.version>4.0.0-M13</maven-site-plugin.version>
 		<maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
 		<maven-release-plugin.version>3.0.0-M5</maven-release-plugin.version>
@@ -64,49 +66,53 @@
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-dependencies</artifactId>
-				<version>${spring-boot.version}</version>
-				<type>pom</type>
-				<scope>import</scope>
+				<groupId>org.junit.jupiter</groupId>
+				<artifactId>junit-jupiter</artifactId>
+				<version>${junit.version}</version>
+				<scope>test</scope>
 			</dependency>
 			<dependency>
-				<groupId>org.springframework.ai</groupId>
-				<artifactId>spring-ai-bom</artifactId>
-				<version>${spring-ai.version}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-			<!-- deep learning dependencies -->
-			<dependency>
-				<groupId>org.deeplearning4j</groupId>
-				<artifactId>deeplearning4j-core</artifactId>
-				<version>${deeplearning4j.version}</version>
+				<groupId>org.assertj</groupId>
+				<artifactId>assertj-core</artifactId>
+				<version>${assertj.version}</version>
+				<scope>test</scope>
 			</dependency>
 			<dependency>
-				<groupId>org.nd4j</groupId>
-				<artifactId>nd4j-native-platform</artifactId>
-				<version>${deeplearning4j.version}</version>
+				<groupId>org.mockito</groupId>
+				<artifactId>mockito-core</artifactId>
+				<version>${mockito.version}</version>
+				<scope>test</scope>
 			</dependency>
-
 		</dependencies>
 	</dependencyManagement>
 
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>io.spring.javaformat</groupId>
-				<artifactId>spring-javaformat-maven-plugin</artifactId>
-				<version>${spring-javaformat-maven-plugin.version}</version>
-				<executions>
-					<execution>
-						<phase>validate</phase>
-						<inherited>true</inherited>
-						<goals>
-							<goal>validate</goal>
-						</goals>
-					</execution>
-				</executions>
+				<groupId>com.diffplug.spotless</groupId>
+				<artifactId>spotless-maven-plugin</artifactId>
+				<version>${spotless.version}</version>
+				<configuration>
+					<java>
+						<palantirJavaFormat>
+							<version>${palantir-format.version}</version>
+							<style>PALANTIR</style>
+							<formatJavadoc>false</formatJavadoc>
+						</palantirJavaFormat>
+					</java>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>${surefire.version}</version>
+				<configuration>
+					<includes>
+						<include>**/*Test.java</include>
+						<include>**/*IT.java</include>
+					</includes>
+					<useModulePath>false</useModulePath>
+				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -163,47 +169,5 @@
 			</plugin>
 		</plugins>
 	</build>
-
-	<repositories>
-		<repository>
-			<id>spring-milestones</id>
-			<url>https://repo.spring.io/milestone</url>
-			<name>Spring Milestones</name>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-	</repositories>
-
-	<pluginRepositories>
-		<!-- Maven Central Repository -->
-		<pluginRepository>
-			<id>central</id>
-			<url>https://repo.maven.apache.org/maven2</url>
-			<name>Maven Central</name>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</pluginRepository>
-
-		<!-- Spring Milestones Repository -->
-		<pluginRepository>
-			<id>spring-milestones</id>
-			<url>https://repo.spring.io/milestone</url>
-			<name>Spring Milestones</name>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</pluginRepository>
-	</pluginRepositories>
 
 </project>
